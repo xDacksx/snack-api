@@ -4,7 +4,7 @@ import { Gender as IGender } from "../interfaces/models/gender";
 export class Gender {
     constructor() {}
 
-    private async Search(name: string): Promise<IGender | null> {
+    public async search(name: string): Promise<IGender | null> {
         try {
             return await primsa.gender.findUnique({ where: { name } });
         } catch (error) {
@@ -12,11 +12,11 @@ export class Gender {
         }
     }
 
-    public get Male() {
-        return this.Search("male");
+    public get male() {
+        return this.search("male");
     }
 
-    public get Female() {
-        return this.Search("female");
+    public get female() {
+        return this.search("female");
     }
 }
