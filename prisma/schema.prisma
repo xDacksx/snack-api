@@ -1,0 +1,158 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model File {
+  id   Int    @id @default(autoincrement())
+  path String
+
+  Brand Brand[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id   String @id
+  name String
+  User User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Gender {
+  id     Int      @id @default(autoincrement())
+  name   String
+  Person Person[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Person {
+  id        Int      @id @default(autoincrement())
+  name      String
+  lastname  String
+  birthdate DateTime
+
+  gender   Gender @relation(fields: [genderId], references: [id])
+  genderId Int
+
+  User User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  username String @id
+
+  Person Person @relation(fields: [personId], references: [id])
+
+  Role   Role   @relation(fields: [roleId], references: [id])
+  roleId String
+
+  OrderUser     Order[] @relation("userId")
+  OrderDelivery Order[] @relation("deliveryId")
+
+  ReportUser     Report[] @relation("userId")
+  ReportDelivery Report[] @relation("deliveryId")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  personId  Int
+}
+
+model Location {
+  id         Int    @id @default(autoincrement())
+  coordinate String
+
+  Brand   Brand @relation(fields: [brandId], references: [id])
+  brandId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Brand {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  imageId Int
+  image   File @relation(fields: [imageId], references: [id])
+
+  locations Location[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  available   Boolean
+
+  OrderProduct OrderProduct[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id String @id @default(uuid())
+
+  userId String
+  client User   @relation("userId", fields: [userId], references: [username])
+
+  deliveryId String
+  delivery   User   @relation("deliveryId", fields: [deliveryId], references: [username])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  OrderStatus OrderStatus[]
+  Products    OrderProduct[]
+}
+
+model OrderProduct {
+  id       Int @id @default(autoincrement())
+  quantity Int
+
+  Product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  Order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderStatus {
+  id      Int    @id @default(autoincrement())
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
+
+  delivered Boolean
+  location  String
+}
+
+model Report {
+  id Int @id @default(autoincrement())
+
+  userId String
+  client User   @relation("userId", fields: [userId], references: [username])
+
+  deliveryId String
+  delivery   User   @relation("deliveryId", fields: [deliveryId], references: [username])
+}
