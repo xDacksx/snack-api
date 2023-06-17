@@ -16,8 +16,8 @@ model File {
 
   Brand Brand[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Role {
@@ -25,8 +25,8 @@ model Role {
   name String
   User User[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Gender {
@@ -49,8 +49,8 @@ model Person {
 
   User User[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model User {
@@ -67,8 +67,8 @@ model User {
   ReportUser     Report[] @relation("userId")
   ReportDelivery Report[] @relation("deliveryId")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
   personId  Int
 }
 
@@ -79,8 +79,8 @@ model Location {
   Brand   Brand @relation(fields: [brandId], references: [id])
   brandId Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Brand {
@@ -92,8 +92,8 @@ model Brand {
 
   locations Location[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Product {
@@ -104,8 +104,8 @@ model Product {
 
   OrderProduct OrderProduct[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Order {
@@ -117,8 +117,8 @@ model Order {
   deliveryId String
   delivery   User   @relation("deliveryId", fields: [deliveryId], references: [username])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   OrderStatus OrderStatus[]
   Products    OrderProduct[]
@@ -134,8 +134,8 @@ model OrderProduct {
   Order   Order  @relation(fields: [orderId], references: [id])
   orderId String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model OrderStatus {
