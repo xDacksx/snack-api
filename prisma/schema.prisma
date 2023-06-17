@@ -22,7 +22,7 @@ model File {
 
 model Role {
   id   String @id
-  name String
+  name String @unique
   User User[]
 
   createdAt DateTime  @default(now())
