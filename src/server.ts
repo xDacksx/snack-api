@@ -10,6 +10,7 @@ import { address } from "ip";
 import cors from "cors";
 import FileUpload from "express-fileupload";
 import { IndexRouter } from "./routes/_index";
+import { controller } from "./controllers";
 
 export class Server {
     private server: Application;
@@ -48,13 +49,14 @@ export class Server {
 
     public listen(): void {
         this.server.listen({ port: this.port }).on("error", this.onError);
-        this.Message();
+        this.message();
+        this.setup();
     }
 
     private onError(error: Error) {
         ErrorMessage(error.message);
     }
-    private Message() {
+    private message() {
         SuccessMessage("Compiled succesfully!\n");
         InfoMessage(`Local:    http://localhost:${this.port}`);
 
@@ -63,5 +65,11 @@ export class Server {
         if (ip === "127.0.0.1") return console.log();
 
         InfoMessage(`Network:  http://${ip}:${this.port}\n`);
+    }
+
+    private async setup() {
+        await controller.role.create("admin");
+        await controller.role.create("client");
+        await controller.role.create("delivery");
     }
 }
