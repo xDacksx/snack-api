@@ -5,11 +5,7 @@ import {
 } from "./interfaces/server.interface";
 import Express, { Application, Router } from "express";
 import colour from "colors";
-import {
-    ErrorMessage,
-    InfoMessage,
-    SuccessMessage,
-} from "./utility/utility.controller";
+import { ErrorMessage, InfoMessage, SuccessMessage } from "./utility";
 import { address } from "ip";
 import cors from "cors";
 import FileUpload from "express-fileupload";
