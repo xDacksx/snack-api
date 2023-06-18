@@ -12,3 +12,12 @@ export interface Role extends Model {
     id: string;
     name: string;
 }
+
+export interface Person extends Model {
+    id: string;
+    name: string;
+    lastname: string;
+    birthdate: Date;
+
+    genderId: number;
+}
