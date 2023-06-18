@@ -1,5 +1,5 @@
 import { primsa } from ".";
-import { Gender as IGender } from "../interfaces/models/gender";
+import { Gender as IGender } from "../interfaces/models";
 
 export class Gender {
     constructor() {}

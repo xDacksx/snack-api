@@ -1,4 +1,4 @@
-import { Role as IRole } from "../interfaces/models/role";
+import { Role as IRole } from "../interfaces/models/";
 import { primsa } from ".";
 import { ErrorMessage, InfoMessage } from "../utility";
 
