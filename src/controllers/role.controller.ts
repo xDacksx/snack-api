@@ -17,8 +17,9 @@ export class Role {
             const role = await this.search(name);
             if (role) return role;
             else {
+                const role = await primsa.role.create({ data: { name } });
                 InfoMessage("Role", name, "has been created!");
-                return await primsa.role.create({ data: { name } });
+                return role;
             }
         } catch (error) {
             if (error instanceof Error) ErrorMessage(error.message);
