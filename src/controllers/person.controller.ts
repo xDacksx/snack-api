@@ -1,4 +1,4 @@
-import { Person as IPerson } from "@prisma/client";
+import { Person as IPerson } from "../interfaces/models";
 import { primsa } from "./";
 
 export class Person {

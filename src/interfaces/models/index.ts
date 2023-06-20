@@ -14,7 +14,7 @@ export interface Role extends Model {
 }
 
 export interface Person extends Model {
-    id: string;
+    id: number;
     name: string;
     lastname: string;
     birthdate: Date;
