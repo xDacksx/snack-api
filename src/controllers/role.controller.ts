@@ -26,4 +26,14 @@ export class Role {
             return null;
         }
     }
+
+    public get client() {
+        return this.search("client");
+    }
+    public get admin() {
+        return this.search("admin");
+    }
+    public get delivery() {
+        return this.search("delivery");
+    }
 }
