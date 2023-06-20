@@ -1,4 +1,4 @@
-export interface AuthSingUp {
+export interface authSignUp {
     name: string;
     lastname: string;
     birthdate: Date;
