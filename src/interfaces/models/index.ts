@@ -3,17 +3,17 @@ export interface Model {
     updatedAt: Date | null;
 }
 
-export interface Gender extends Model {
+export interface Gender {
     id: number;
     name: string;
 }
 
-export interface Role extends Model {
+export interface Role {
     id: string;
     name: string;
 }
 
-export interface Person extends Model {
+export interface Person {
     id: number;
     name: string;
     lastname: string;
@@ -21,3 +21,7 @@ export interface Person extends Model {
 
     genderId: number;
 }
+
+export type GenderModel = Gender & Model;
+export type RoleModel = Role & Model;
+export type PersonModel = Person & Model;
