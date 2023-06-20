@@ -11,6 +11,7 @@ import cors from "cors";
 import FileUpload from "express-fileupload";
 import { IndexRouter } from "./routes/_index";
 import { controller } from "./controllers";
+import { AuthRoute } from "./routes/auth.route";
 
 export class Server {
     private server: Application;
@@ -39,6 +40,10 @@ export class Server {
             {
                 direction: "/",
                 function: IndexRouter,
+            },
+            {
+                direction: "/auth",
+                function: AuthRoute,
             },
         ];
 
