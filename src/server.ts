@@ -68,6 +68,9 @@ export class Server {
     }
 
     private async setup() {
+        const connected = await controller.databse.checkConnection();
+        if (!connected) return;
+
         await controller.role.create("admin");
         await controller.role.create("client");
         await controller.role.create("delivery");
