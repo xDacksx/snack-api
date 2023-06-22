@@ -4,17 +4,17 @@ export interface Model {
 }
 
 export interface Gender {
-    id: number;
+    id?: number;
     name: string;
 }
 
 export interface Role {
-    id: string;
+    id?: string;
     name: string;
 }
 
 export interface Person {
-    id: number;
+    id?: number;
     name: string;
     lastname: string;
     birthdate: Date;
