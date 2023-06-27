@@ -27,6 +27,13 @@ export class Gender {
             return null;
         }
     }
+    private async getAll() {
+        return await primsa.gender.findMany();
+    }
+
+    public get all() {
+        return this.getAll();
+    }
 
     public get male() {
         return this.search("male");
