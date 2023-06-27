@@ -9,3 +9,8 @@ export interface authSignUp {
     genderId: number;
     roleId: string;
 }
+
+export interface authSignIn {
+    username: string;
+    password: string;
+}
