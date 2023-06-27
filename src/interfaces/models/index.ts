@@ -22,6 +22,14 @@ export interface Person {
     genderId: number;
 }
 
+export interface User {
+    username: string;
+    password: string;
+    personId: number;
+    roleId: string;
+}
+
 export type GenderModel = Gender & Model;
 export type RoleModel = Role & Model;
 export type PersonModel = Person & Model;
+export type UserModel = User & Model;
