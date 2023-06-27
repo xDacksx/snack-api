@@ -8,22 +8,25 @@ export class Auth {
     constructor() {}
 
     public async findUser(username: string): Promise<UserModel | null> {
-        // try {
-        //     const data = await primsa.user.findUnique({ where: { username } });
-        //     if (data) {
-        //         const user: UserModel = data;
-        //         return user;
-        //     } else return null;
-        // } catch (error) {
-        //     return null;
-        // }
+        try {
+            const data = await primsa.user.findUnique({ where: { username } });
+            if (data) {
+                const user: UserModel = data;
+                return user;
+            } else return null;
+        } catch (error) {
+            return null;
+        }
         return null;
     }
 
-    public async signUp(data: User) {
+    public async signUp(data: User): Promise<UserModel | null> {
         try {
             const { name, lastname, genderId } = data;
             const clientRole = await controller.role.client;
+
+            const alreadyExists = await controller.auth.findUser(data.username);
+            if (alreadyExists) return null;
 
             if (clientRole && clientRole.id) {
                 const salt = await genSalt();
@@ -48,7 +51,6 @@ export class Auth {
             return null;
         } catch (error) {
             if (error instanceof Error) ErrorMessage(error.message);
-
             return null;
         }
     }
