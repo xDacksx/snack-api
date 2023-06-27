@@ -4,9 +4,9 @@ import { Req } from "../interfaces/middlewares.interface";
 import { UserModel } from "../interfaces/models";
 import { ServerResponse } from "../interfaces/server.interface";
 
-type Res = TypedResponse<ServerResponse<null | UserModel>>;
+type ResSignUp = TypedResponse<ServerResponse<null | UserModel>>;
 
-export const signUp = async (req: Req, res: Res): Promise<Res> => {
+export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
     const { name, lastname, gender } = req.body;
     const { username, password } = req.body;
 
@@ -54,4 +54,12 @@ export const signUp = async (req: Req, res: Res): Promise<Res> => {
             messsage: "Error!",
         });
     }
+};
+
+export const signIn = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
+    const { username, password } = req.body;
+
+    const data = await controller.auth.signIn({ username, password });
+
+    return res.json(data);
 };

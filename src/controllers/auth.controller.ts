@@ -1,8 +1,10 @@
 import { controller, primsa } from ".";
-import { authSignUp } from "../interfaces/controllers/auth";
+import { authSignIn } from "../interfaces/controllers/auth";
 import { compare, genSalt, hash } from "bcrypt";
 import { User, UserModel } from "../interfaces/models";
 import { ErrorMessage } from "../utility";
+import { ControllerResponse } from "../interfaces/controllers";
+import { sign } from "jsonwebtoken";
 
 export class Auth {
     constructor() {}
@@ -17,7 +19,6 @@ export class Auth {
         } catch (error) {
             return null;
         }
-        return null;
     }
 
     public async signUp(data: User): Promise<UserModel | null> {
@@ -52,6 +53,38 @@ export class Auth {
         } catch (error) {
             if (error instanceof Error) ErrorMessage(error.message);
             return null;
+        }
+    }
+
+    public async signIn(data: authSignIn): Promise<ControllerResponse<any>> {
+        const { username, password } = data;
+        const user = await this.findUser(username);
+
+        if (user) {
+            const passwordMatch = await compare(password, user.password);
+            if (passwordMatch) {
+                const webToken = sign(user, process.env.WEB_TOKEN || "secret", {
+                    noTimestamp: true,
+                });
+
+                return {
+                    data: {
+                        user,
+                        token: webToken,
+                    },
+                    message: `Logged as ${username}`,
+                };
+            } else {
+                return {
+                    data: null,
+                    message: "Wrong username/password combination!",
+                };
+            }
+        } else {
+            return {
+                data: null,
+                message: `User '${username}' does not exist!`,
+            };
         }
     }
 }

@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { signUp } from "../middlewares/auth.middleware";
-import { signUpVaidator } from "../middlewares/validators/auth.validator";
+import { signIn, signUp } from "../middlewares/auth.middleware";
+import {
+    signInVaidator,
+    signUpVaidator,
+} from "../middlewares/validators/auth.validator";
 const router: Router = Router();
 
 router.post("/sign-up", signUpVaidator, signUp);
+router.post("/sign-in", signInVaidator, signIn);
 
 export { router as AuthRoute };
