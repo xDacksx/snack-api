@@ -10,6 +10,7 @@ export const signUpVaidator = [
         .withMessage("Name field can not be empty")
 
         .isString()
+        .trim()
         .withMessage("Name value must be a string value")
 
         .isLength({ min: 4, max: 50 })
@@ -22,6 +23,7 @@ export const signUpVaidator = [
         .withMessage("Lastname field can not be empty")
 
         .isString()
+        .trim()
         .withMessage("Lastname value must be a string value")
 
         .isLength({ min: 4, max: 50 })
@@ -35,6 +37,7 @@ export const signUpVaidator = [
         .withMessage("Gender field can not be empty")
 
         .isString()
+        .trim()
         .withMessage("Gender value must be a string value")
 
         .isIn(["male", "female"])
@@ -48,6 +51,7 @@ export const signUpVaidator = [
         .withMessage("Username field can not be empty")
 
         .isString()
+        .trim()
         .withMessage("Username value must be a string value")
 
         .isLength({ min: 4, max: 50 })
@@ -61,6 +65,7 @@ export const signUpVaidator = [
         .withMessage("Password field can not be empty")
 
         .isString()
+        .trim()
         .withMessage("Password value must be a string value")
 
         .isLength({ min: 4, max: 50 })
