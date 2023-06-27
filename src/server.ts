@@ -9,7 +9,7 @@ import { ErrorMessage, InfoMessage, SuccessMessage } from "./utility";
 import { address } from "ip";
 import cors from "cors";
 import FileUpload from "express-fileupload";
-import { IndexRouter } from "./routes/_index";
+import { IndexRouter } from "./routes";
 import { controller } from "./controllers";
 import { AuthRoute } from "./routes/auth.route";
 
@@ -79,5 +79,8 @@ export class Server {
         await controller.role.create("admin");
         await controller.role.create("client");
         await controller.role.create("delivery");
+
+        await controller.gender.create("male");
+        await controller.gender.create("female");
     }
 }

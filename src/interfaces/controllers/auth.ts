@@ -3,10 +3,9 @@ export interface authSignUp {
     lastname: string;
     birthdate: Date;
 
+    username: string;
     password: string;
 
     genderId: number;
-
-    username: string;
-    roleId: number;
+    roleId: string;
 }

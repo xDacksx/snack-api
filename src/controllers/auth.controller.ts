@@ -1,46 +1,45 @@
 import { controller, primsa } from ".";
 import { authSignUp } from "../interfaces/controllers/auth";
 import { compare, genSalt, hash } from "bcrypt";
-import { Person, UserModel } from "../interfaces/models";
+import { User, UserModel } from "../interfaces/models";
+import { ErrorMessage } from "../utility";
 
 export class Auth {
     constructor() {}
 
     public async findUser(username: string): Promise<UserModel | null> {
-        try {
-            const data = await primsa.user.findUnique({ where: { username } });
-            if (data) {
-                const user: UserModel = data;
-                return user;
-            } else return null;
-        } catch (error) {
-            return null;
-        }
+        // try {
+        //     const data = await primsa.user.findUnique({ where: { username } });
+        //     if (data) {
+        //         const user: UserModel = data;
+        //         return user;
+        //     } else return null;
+        // } catch (error) {
+        //     return null;
+        // }
+        return null;
     }
 
-    public async signUp(data: authSignUp) {
+    public async signUp(data: User) {
         try {
-            const { name, lastname, birthdate, genderId } = data;
-            const person = await controller.person.create({
-                name,
-                lastname,
-                birthdate,
-                genderId,
-            });
+            const { name, lastname, genderId } = data;
             const clientRole = await controller.role.client;
 
-            if (person && person.id && clientRole?.id) {
+            if (clientRole && clientRole.id) {
                 const salt = await genSalt();
                 const passwordHashed = await hash(data.password, salt);
-
-                console.log(compare(data.password, passwordHashed));
 
                 const user: UserModel = await primsa.user.create({
                     data: {
                         username: data.username,
                         password: passwordHashed,
-                        personId: person.id,
+
+                        name,
+                        lastname,
+
                         roleId: clientRole.id,
+                        genderId: genderId,
+                        birthdate: new Date(),
                     },
                 });
 
@@ -48,6 +47,8 @@ export class Auth {
             }
             return null;
         } catch (error) {
+            if (error instanceof Error) ErrorMessage(error.message);
+
             return null;
         }
     }
