@@ -2,16 +2,12 @@ import { PrismaClient } from "@prisma/client";
 import { Gender } from "./gender.controller";
 import { Role } from "./role.controller";
 import { Database } from "./database.controller";
-import { Person } from "./person.controller";
+import { Auth } from "./auth.controller";
 
 export const primsa = new PrismaClient();
 
 export class ControllerClient {
     constructor() {}
-
-    get person(): Person {
-        return new Person();
-    }
 
     get gender(): Gender {
         return new Gender();
@@ -23,6 +19,10 @@ export class ControllerClient {
 
     get databse(): Database {
         return new Database();
+    }
+
+    get auth(): Auth {
+        return new Auth();
     }
 }
 
