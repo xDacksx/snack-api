@@ -83,3 +83,44 @@ export const signUpVaidator = [
         });
     },
 ];
+export const signInVaidator = [
+    check("username")
+        .exists()
+        .withMessage("Couldn't find username field")
+
+        .notEmpty()
+        .withMessage("Username field can not be empty")
+
+        .isString()
+        .trim()
+        .withMessage("Username value must be a string value")
+
+        .isLength({ min: 4, max: 50 })
+        .withMessage("Username field must be 4-50 characters"),
+
+    check("password")
+        .exists()
+        .withMessage("Couldn't find password field")
+
+        .notEmpty()
+        .withMessage("Password field can not be empty")
+
+        .isString()
+        .trim()
+        .withMessage("Password value must be a string value")
+
+        .isLength({ min: 4, max: 50 })
+        .withMessage("Password field must be 4-50 characters"),
+    (req: Req, res: Res, next: Next): Res | void => {
+        const result: Result = validationResult(req);
+        const errors = result.array({ onlyFirstError: true });
+
+        if (errors.length < 1) return next();
+
+        return res.send({
+            message: "Error!",
+            user: null,
+            errors,
+        });
+    },
+];
