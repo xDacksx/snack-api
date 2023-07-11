@@ -27,7 +27,7 @@ export interface User {
 
 export interface Session {
     id?: string;
-    userEamil: string;
+    userEmail: string;
     date: Date;
     expires: Date;
 }
