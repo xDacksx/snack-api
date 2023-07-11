@@ -39,7 +39,7 @@ model Gender {
 }
 
 model User {
-  username String @id
+  email    String @id
   password String
 
   name      String
@@ -52,11 +52,13 @@ model User {
   Role   Role   @relation(fields: [roleId], references: [id])
   roleId String
 
-  OrderUser     Order[] @relation("userId")
-  OrderDelivery Order[] @relation("deliveryId")
+  OrderUser     Order[] @relation("orderEmailClient")
+  OrderDelivery Order[] @relation("orderEmailDeliver")
 
-  ReportUser     Report[] @relation("userId")
-  ReportDelivery Report[] @relation("deliveryId")
+  ReportUser     Report[] @relation("reportEmailClient")
+  ReportDelivery Report[] @relation("reportEmailDeliver")
+
+  Session Session[] @relation("sessionEmailUser")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -102,10 +104,10 @@ model Order {
   id String @id @default(uuid())
 
   userId String
-  client User   @relation("userId", fields: [userId], references: [username])
+  client User   @relation("orderEmailClient", fields: [userId], references: [email])
 
   deliveryId String
-  delivery   User   @relation("deliveryId", fields: [deliveryId], references: [username])
+  delivery   User   @relation("orderEmailDeliver", fields: [deliveryId], references: [email])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -141,8 +143,18 @@ model Report {
   id Int @id @default(autoincrement())
 
   userId String
-  client User   @relation("userId", fields: [userId], references: [username])
+  client User   @relation("reportEmailClient", fields: [userId], references: [email])
 
   deliveryId String
-  delivery   User   @relation("deliveryId", fields: [deliveryId], references: [username])
+  delivery   User   @relation("reportEmailDeliver", fields: [deliveryId], references: [email])
+}
+
+model Session {
+  id String @id @default(uuid())
+
+  userEmail String
+  user      User   @relation("sessionEmailUser", fields: [userEmail], references: [email])
+
+  date    DateTime
+  expires DateTime
 }
