@@ -137,6 +137,9 @@ model OrderStatus {
 
   delivered Boolean
   location  String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Report {
@@ -147,6 +150,9 @@ model Report {
 
   deliveryEmail String
   delivery      User   @relation("reportEmailDeliver", fields: [deliveryEmail], references: [email])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Session {
@@ -157,4 +163,7 @@ model Session {
 
   date    DateTime
   expires DateTime
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }

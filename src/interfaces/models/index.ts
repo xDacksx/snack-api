@@ -25,6 +25,14 @@ export interface User {
     genderId: number;
 }
 
+export interface Session {
+    id?: string;
+    userEamil: string;
+    date: Date;
+    expires: Date;
+}
+
 export type GenderModel = Gender & Model;
 export type RoleModel = Role & Model;
 export type UserModel = User & Model;
+export type SessionModel = Session & Model;
