@@ -1,14 +1,20 @@
 import colour from "colors";
 
-const date = new Date();
-const hours =
-    date.getHours() > 9 ? `${date.getHours()}` : `0${date.getHours()}`;
-const minutes =
-    date.getMinutes() > 9 ? `${date.getMinutes()}` : `0${date.getMinutes()}`;
-const seconds =
-    date.getSeconds() > 9 ? `${date.getSeconds()}` : `0${date.getSeconds()}`;
+function getTime() {
+    const date = new Date();
+    const hours =
+        date.getHours() > 9 ? `${date.getHours()}` : `0${date.getHours()}`;
+    const minutes =
+        date.getMinutes() > 9
+            ? `${date.getMinutes()}`
+            : `0${date.getMinutes()}`;
+    const seconds =
+        date.getSeconds() > 9
+            ? `${date.getSeconds()}`
+            : `0${date.getSeconds()}`;
 
-const time = colour.gray(`[${hours}:${minutes}:${seconds}]`);
+    return colour.gray(`[${hours}:${minutes}:${seconds}]`);
+}
 
 /**
  * Prints a green message on console.
@@ -21,7 +27,7 @@ export function SuccessMessage(
     important?: string,
     part2?: string
 ): void {
-    const message = `${time}${colour.green("[Success]:")} ${colour.white(
+    const message = `${getTime()}${colour.green("[Success]:")} ${colour.white(
         part1
     )} ${colour.yellow(important || "")} ${colour.white(part2 || "")}`;
     console.log(message);
@@ -37,7 +43,7 @@ export function ErrorMessage(
     important?: string,
     part2?: string
 ): void {
-    const message = `${time}${colour.red("[Error]:")}   ${colour.white(
+    const message = `${getTime()}${colour.red("[Error]:")}   ${colour.white(
         part1
     )} ${colour.yellow(important || "")} ${colour.white(part2 || "")}`;
     console.log(message);
@@ -53,7 +59,7 @@ export function WarnMessage(
     important?: string,
     part2?: string
 ): void {
-    const message = `${time}${colour.yellow("[Warning]:")} ${colour.white(
+    const message = `${getTime()}${colour.yellow("[Warning]:")} ${colour.white(
         part1
     )} ${colour.yellow(important || "")} ${colour.white(part2 || "")}`;
     console.log(message);
@@ -69,7 +75,7 @@ export function InfoMessage(
     important?: string,
     part2?: string
 ): void {
-    const message = `${time}${colour.cyan("[Info]:")}    ${colour.white(
+    const message = `${getTime()}${colour.cyan("[Info]:")}    ${colour.white(
         part1
     )} ${colour.yellow(important || "")} ${colour.white(part2 || "")}`;
     console.log(message);
