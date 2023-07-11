@@ -103,11 +103,11 @@ model Product {
 model Order {
   id String @id @default(uuid())
 
-  userId String
-  client User   @relation("orderEmailClient", fields: [userId], references: [email])
+  userEmail String
+  client    User   @relation("orderEmailClient", fields: [userEmail], references: [email])
 
-  deliveryId String
-  delivery   User   @relation("orderEmailDeliver", fields: [deliveryId], references: [email])
+  deliveryEmail String
+  delivery      User   @relation("orderEmailDeliver", fields: [deliveryEmail], references: [email])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
@@ -142,11 +142,11 @@ model OrderStatus {
 model Report {
   id Int @id @default(autoincrement())
 
-  userId String
-  client User   @relation("reportEmailClient", fields: [userId], references: [email])
+  userEmail String
+  client    User   @relation("reportEmailClient", fields: [userEmail], references: [email])
 
-  deliveryId String
-  delivery   User   @relation("reportEmailDeliver", fields: [deliveryId], references: [email])
+  deliveryEmail String
+  delivery      User   @relation("reportEmailDeliver", fields: [deliveryEmail], references: [email])
 }
 
 model Session {
