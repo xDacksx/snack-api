@@ -12,6 +12,6 @@ export interface ServerRoute {
 }
 export interface ServerResponse<T> {
     data: T;
-    messsage: string;
+    message: string;
     errors: Array<string>;
 }

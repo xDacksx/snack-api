@@ -1,10 +1,17 @@
 import { controller } from "../controllers";
 import { TypedResponse } from "../interfaces";
-import { Req } from "../interfaces/middlewares.interface";
+import { Next, Req } from "../interfaces/middlewares.interface";
 import { UserModel } from "../interfaces/models";
 import { ServerResponse } from "../interfaces/server.interface";
 
 type ResSignUp = TypedResponse<ServerResponse<null | UserModel>>;
+type ResSignIn = TypedResponse<
+    ServerResponse<null | {
+        user: UserModel;
+        token: string;
+    }>
+>;
+type ResVerifyToken = TypedResponse<ServerResponse<null>>;
 
 export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
     const { name, lastname, gender } = req.body;
@@ -33,13 +40,13 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
         if (user) {
             return res.send({
                 data: user,
-                messsage: "Account created succesfully",
+                message: "Account created succesfully",
                 errors: [],
             });
         } else {
             return res.send({
                 data: null,
-                messsage: `Email: ${email} is already in use!`,
+                message: `Email: ${email} is already in use!`,
                 errors: [],
             });
         }
@@ -51,15 +58,80 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
         return res.send({
             data: null,
             errors,
-            messsage: "Error!",
+            message: "Error!",
         });
     }
 };
 
-export const signIn = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
+export const signIn = async (req: Req, res: ResSignIn): Promise<ResSignIn> => {
     const { email, password } = req.body;
 
-    const data = await controller.auth.signIn({ email, password });
+    try {
+        const { data, message } = await controller.auth.signIn({
+            email,
+            password,
+        });
+        return res.send({
+            data,
+            message,
+            errors: [],
+        });
+    } catch (error) {
+        const errors: Array<string> = [];
+        if (error instanceof Error) errors.push(error.message);
+        return res.send({
+            data: null,
+            errors,
+            message: "Error!",
+        });
+    }
+};
 
-    return res.json(data);
+export const sessionSignIn = async (
+    _req: Req,
+    res: ResSignIn
+): Promise<ResSignIn> => {
+    return res.send({
+        data: res.locals.data,
+        message: res.locals.msg,
+        errors: [],
+    });
+};
+
+export const verifyToken = async (
+    req: Req,
+    res: ResVerifyToken,
+    next: Next
+): Promise<ResVerifyToken | void> => {
+    if (req.headers.authorization) {
+        try {
+            const token = req.headers.authorization.split(" ")[1];
+            const { data, message } = await controller.auth.sessionSignIn(
+                token
+            );
+
+            res.locals.data = data;
+            res.locals.msg = message;
+            if (data) return next();
+            return res.send({
+                data,
+                message,
+                errors: [],
+            });
+        } catch (error) {
+            const errors: Array<string> = [];
+            if (error instanceof Error) errors.push(error.message);
+            return res.send({
+                data: null,
+                errors,
+                message: "Error!",
+            });
+        }
+    } else {
+        return res.send({
+            data: null,
+            errors: ["No token was found!"],
+            message: "Error!",
+        });
+    }
 };
