@@ -8,7 +8,7 @@ type ResSignUp = TypedResponse<ServerResponse<null | UserModel>>;
 
 export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
     const { name, lastname, gender } = req.body;
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     const clientRole = await controller.role.client;
     const male = await controller.gender.male;
@@ -23,7 +23,7 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
         const user = await controller.auth.signUp({
             name,
             lastname,
-            username,
+            email,
             password,
             birthdate: new Date(),
             genderId,
@@ -33,13 +33,13 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
         if (user) {
             return res.send({
                 data: user,
-                messsage: "User created succesfully",
+                messsage: "Account created succesfully",
                 errors: [],
             });
         } else {
             return res.send({
                 data: null,
-                messsage: `User ${username} already exists!`,
+                messsage: `Email: ${email} is already in use!`,
                 errors: [],
             });
         }
@@ -57,9 +57,9 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
 };
 
 export const signIn = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    const data = await controller.auth.signIn({ username, password });
+    const data = await controller.auth.signIn({ email, password });
 
     return res.json(data);
 };

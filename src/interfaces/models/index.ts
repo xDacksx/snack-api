@@ -3,29 +3,25 @@ export interface Model {
     updatedAt: Date | null;
 }
 
+export interface Role {
+    id?: number;
+    name: string;
+}
+
 export interface Gender {
     id?: number;
     name: string;
 }
 
-export interface Role {
-    id?: string;
-    name: string;
-}
-
-export interface Person {
-    id?: number;
-}
-
 export interface User {
-    username: string;
+    email: string;
     password: string;
 
     name: string;
     lastname: string;
     birthdate: Date;
 
-    roleId: string;
+    roleId: number;
     genderId: number;
 }
 

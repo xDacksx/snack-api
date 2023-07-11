@@ -43,16 +43,16 @@ export const signUpVaidator = [
         .isIn(["male", "female"])
         .withMessage("Gender value must be 'male' or 'female'"),
 
-    check("username")
+    check("email")
         .exists()
         .withMessage("Couldn't find username field")
 
         .notEmpty()
         .withMessage("Username field can not be empty")
 
-        .isString()
+        .isEmail()
         .trim()
-        .withMessage("Username value must be a string value")
+        .withMessage("Email is invalid")
 
         .isLength({ min: 4, max: 50 })
         .withMessage("Username field must be 4-50 characters"),
@@ -84,16 +84,16 @@ export const signUpVaidator = [
     },
 ];
 export const signInVaidator = [
-    check("username")
+    check("email")
         .exists()
         .withMessage("Couldn't find username field")
 
         .notEmpty()
         .withMessage("Username field can not be empty")
 
-        .isString()
+        .isEmail()
         .trim()
-        .withMessage("Username value must be a string value")
+        .withMessage("Email is invalid")
 
         .isLength({ min: 4, max: 50 })
         .withMessage("Username field must be 4-50 characters"),

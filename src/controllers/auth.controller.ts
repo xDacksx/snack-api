@@ -9,9 +9,9 @@ import { sign } from "jsonwebtoken";
 export class Auth {
     constructor() {}
 
-    public async findUser(username: string): Promise<UserModel | null> {
+    public async findUser(email: string): Promise<UserModel | null> {
         try {
-            const data = await primsa.user.findUnique({ where: { username } });
+            const data = await primsa.user.findUnique({ where: { email } });
             if (data) {
                 const user: UserModel = data;
                 return user;
@@ -26,7 +26,7 @@ export class Auth {
             const { name, lastname, genderId } = data;
             const clientRole = await controller.role.client;
 
-            const alreadyExists = await controller.auth.findUser(data.username);
+            const alreadyExists = await controller.auth.findUser(data.email);
             if (alreadyExists) return null;
 
             if (clientRole && clientRole.id) {
@@ -35,7 +35,7 @@ export class Auth {
 
                 const user: UserModel = await primsa.user.create({
                     data: {
-                        username: data.username,
+                        email: data.email,
                         password: passwordHashed,
 
                         name,
@@ -57,8 +57,8 @@ export class Auth {
     }
 
     public async signIn(data: authSignIn): Promise<ControllerResponse<any>> {
-        const { username, password } = data;
-        const user = await this.findUser(username);
+        const { email, password } = data;
+        const user = await this.findUser(email);
 
         if (user) {
             const passwordMatch = await compare(password, user.password);
@@ -72,18 +72,18 @@ export class Auth {
                         user,
                         token: webToken,
                     },
-                    message: `Logged as ${username}`,
+                    message: `Logged as ${email}`,
                 };
             } else {
                 return {
                     data: null,
-                    message: "Wrong username/password combination!",
+                    message: "Wrong email/password combination!",
                 };
             }
         } else {
             return {
                 data: null,
-                message: `User '${username}' does not exist!`,
+                message: `Email: '${email}' is not registered!`,
             };
         }
     }

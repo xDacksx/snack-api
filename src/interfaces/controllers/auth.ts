@@ -5,14 +5,14 @@ export interface authSignUp {
     lastname: string;
     birthdate: Date;
 
-    username: string;
+    email: string;
     password: string;
 
     genderId: number;
-    roleId: string;
+    roleId: number;
 }
 
 export interface authSignIn {
-    username: string;
+    email: string;
     password: string;
 }
