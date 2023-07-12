@@ -1,17 +1,10 @@
 import { controller } from "../controllers";
-import { TypedResponse } from "../interfaces";
 import { Next, Req } from "../interfaces/middlewares.interface";
-import { UserModel } from "../interfaces/models";
-import { ServerResponse } from "../interfaces/server.interface";
-
-type ResSignUp = TypedResponse<ServerResponse<null | UserModel>>;
-type ResSignIn = TypedResponse<
-    ServerResponse<null | {
-        user: UserModel;
-        token: string;
-    }>
->;
-type ResVerifyToken = TypedResponse<ServerResponse<null>>;
+import {
+    ResSignIn,
+    ResSignUp,
+    ResVerifyToken,
+} from "../interfaces/middlewares/auth";
 
 export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
     const { name, lastname, gender } = req.body;
@@ -39,7 +32,15 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
 
         if (user) {
             return res.send({
-                data: user,
+                data: {
+                    email: user.email,
+                    name: user.name,
+                    lastname: user.lastname,
+                    roleId: user.roleId,
+                    genderId: user.genderId,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
+                },
                 message: "Account created succesfully",
                 errors: [],
             });
@@ -47,7 +48,7 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
             return res.send({
                 data: null,
                 message: `Email: ${email} is already in use!`,
-                errors: [],
+                errors: [`Email: ${email} is already in use!`],
             });
         }
     } catch (error) {
@@ -71,8 +72,29 @@ export const signIn = async (req: Req, res: ResSignIn): Promise<ResSignIn> => {
             email,
             password,
         });
+
+        if (!data)
+            return res.send({
+                data,
+                message,
+                errors: [message],
+            });
+
+        const { token, user } = data;
+
         return res.send({
-            data,
+            data: {
+                user: {
+                    email: user.email,
+                    name: user.name,
+                    lastname: user.lastname,
+                    roleId: user.roleId,
+                    genderId: user.genderId,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
+                },
+                token,
+            },
             message,
             errors: [],
         });
