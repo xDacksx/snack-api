@@ -29,7 +29,11 @@ export class Server {
         this.server.set("port", this.port);
     }
     private middlewares(): void {
-        this.server.use(cors());
+        this.server.use(
+            cors({
+                origin: "http://localhost:5173",
+            })
+        );
         this.server.use(FileUpload({ createParentPath: true }));
         this.server.use(Express.urlencoded({ extended: true }));
         this.server.use(Express.json());
