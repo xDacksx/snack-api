@@ -1,11 +1,11 @@
 import { ErrorMessage, SuccessMessage } from "../utility";
-import { primsa } from ".";
+import { prisma } from ".";
 
 export class Database {
     constructor() {}
     public async checkConnection(): Promise<boolean> {
         try {
-            await primsa.$queryRaw`SELECT 1+1`;
+            await prisma.$queryRaw`SELECT 1+1`;
             SuccessMessage("Database", "snack", "succesfully connected!");
             return true;
         } catch (error) {

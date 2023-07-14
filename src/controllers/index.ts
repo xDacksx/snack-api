@@ -4,7 +4,7 @@ import { Gender } from "./gender.controller";
 import { Role } from "./role.controller";
 import { Auth } from "./auth.controller";
 
-export const primsa = new PrismaClient();
+export const prisma = new PrismaClient();
 
 export class ControllerClient {
     constructor() {}

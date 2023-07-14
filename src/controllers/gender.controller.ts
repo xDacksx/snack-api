@@ -1,13 +1,13 @@
 import { ErrorMessage, InfoMessage } from "../utility";
 import { Gender as IGender } from "../interfaces/models";
-import { primsa } from ".";
+import { prisma } from ".";
 
 export class Gender {
     constructor() {}
 
     public async search(name: string): Promise<IGender | null> {
         try {
-            return await primsa.gender.findUnique({ where: { name } });
+            return await prisma.gender.findUnique({ where: { name } });
         } catch (error) {
             return null;
         }
@@ -18,7 +18,7 @@ export class Gender {
             const gender = await this.search(name);
             if (gender) return gender;
             else {
-                const gender = await primsa.gender.create({ data: { name } });
+                const gender = await prisma.gender.create({ data: { name } });
                 InfoMessage("Gender", name, "has been created!");
                 return gender;
             }
@@ -28,7 +28,7 @@ export class Gender {
         }
     }
     private async getAll() {
-        return await primsa.gender.findMany();
+        return await prisma.gender.findMany();
     }
 
     public get all() {

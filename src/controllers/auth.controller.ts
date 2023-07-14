@@ -4,14 +4,14 @@ import { authSignIn } from "../interfaces/controllers/auth";
 import { ErrorMessage, InfoMessage } from "../utility";
 import { compare, genSalt, hash } from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
-import { controller, primsa } from ".";
+import { controller, prisma } from ".";
 
 export class Auth {
     constructor() {}
 
     public async findUser(email: string): Promise<UserModel | null> {
         try {
-            const data = await primsa.user.findUnique({ where: { email } });
+            const data = await prisma.user.findUnique({ where: { email } });
             if (data) {
                 const user: UserModel = data;
                 return user;
@@ -33,7 +33,7 @@ export class Auth {
                 const salt = await genSalt();
                 const passwordHashed = await hash(data.password, salt);
 
-                const user: UserModel = await primsa.user.create({
+                const user: UserModel = await prisma.user.create({
                     data: {
                         email: data.email,
                         password: passwordHashed,
@@ -112,13 +112,13 @@ export class Auth {
             const date = new Date();
             const newDate = new Date(date.setMonth(date.getMonth() + 1));
 
-            const existingSessions = await primsa.session.findMany({
+            const existingSessions = await prisma.session.findMany({
                 where: { userEmail: email },
             });
 
             if (existingSessions.length >= 10) {
                 const oldest = existingSessions[0];
-                await primsa.session.delete({ where: { id: oldest.id } });
+                await prisma.session.delete({ where: { id: oldest.id } });
                 InfoMessage(
                     "Deleted oldest session of",
                     email,
@@ -126,7 +126,7 @@ export class Auth {
                 );
             }
 
-            const session: SessionModel = await primsa.session.create({
+            const session: SessionModel = await prisma.session.create({
                 data: {
                     userEmail: email,
                     date,
@@ -149,7 +149,7 @@ export class Auth {
         try {
             const sessionId = verify(token, process.env.WEB_TOKEN || "secret");
 
-            const session = await primsa.session.findUnique({
+            const session = await prisma.session.findUnique({
                 where: { id: sessionId.toString() },
             });
 
