@@ -5,7 +5,12 @@ import {
 } from "./interfaces/server.interface";
 import Express, { Application, Router } from "express";
 import colour from "colors";
-import { ErrorMessage, InfoMessage, SuccessMessage } from "./utility";
+import {
+    ErrorMessage,
+    InfoMessage,
+    SuccessMessage,
+    addresses,
+} from "./utility";
 import { address } from "ip";
 import cors from "cors";
 import FileUpload from "express-fileupload";
@@ -16,6 +21,8 @@ import { AuthRoute } from "./routes/auth.route";
 export class Server {
     private server: Application;
     private port: ServerPort;
+
+    private ip = addresses().WiFi[0];
 
     constructor({ port }: ServerOptions) {
         this.server = Express();
@@ -31,7 +38,7 @@ export class Server {
     private middlewares(): void {
         this.server.use(
             cors({
-                origin: "http://localhost:5173",
+                origin: ["http://localhost:5173", `http://${this.ip}:5173`],
             })
         );
         this.server.use(FileUpload({ createParentPath: true }));
@@ -57,7 +64,7 @@ export class Server {
     }
 
     public listen(): void {
-        this.server.listen({ port: this.port }).on("error", this.onError);
+        this.server.listen(this.port).on("error", this.onError);
         this.message();
         this.setup();
     }
@@ -69,11 +76,9 @@ export class Server {
         SuccessMessage("Compiled succesfully!\n");
         InfoMessage(`Local:    http://localhost:${this.port}`);
 
-        const ip = address();
+        if (this.ip === "127.0.0.1") return console.log();
 
-        if (ip === "127.0.0.1") return console.log();
-
-        InfoMessage(`Network:  http://${ip}:${this.port}\n`);
+        InfoMessage(`Network:  http://${this.ip}:${this.port}\n`);
     }
 
     private async setup() {
