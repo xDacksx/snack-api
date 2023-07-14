@@ -1,22 +1,14 @@
-import {
-    ServerOptions,
-    ServerPort,
-    ServerRoute,
-} from "./interfaces/server.interface";
-import Express, { Application, Router } from "express";
-import colour from "colors";
-import {
-    ErrorMessage,
-    InfoMessage,
-    SuccessMessage,
-    addresses,
-} from "./utility";
-import { address } from "ip";
-import cors from "cors";
-import FileUpload from "express-fileupload";
-import { IndexRouter } from "./routes";
-import { controller } from "./controllers";
+import { ServerPort, ServerRoute } from "./interfaces/server.interface";
+import { ServerOptions } from "./interfaces/server.interface";
+import { SuccessMessage, addresses } from "./utility";
+import { ErrorMessage, InfoMessage } from "./utility";
 import { AuthRoute } from "./routes/auth.route";
+import Express, { Application } from "express";
+import FileUpload from "express-fileupload";
+import { controller } from "./controllers";
+import { IndexRouter } from "./routes";
+import colour from "colors";
+import cors from "cors";
 
 export class Server {
     private server: Application;

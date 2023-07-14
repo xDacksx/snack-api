@@ -1,6 +1,6 @@
-import { primsa } from ".";
-import { Gender as IGender } from "../interfaces/models";
 import { ErrorMessage, InfoMessage } from "../utility";
+import { Gender as IGender } from "../interfaces/models";
+import { primsa } from ".";
 
 export class Gender {
     constructor() {}

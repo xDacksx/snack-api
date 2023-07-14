@@ -1,5 +1,5 @@
-import { primsa } from ".";
 import { ErrorMessage, SuccessMessage } from "../utility";
+import { primsa } from ".";
 
 export class Database {
     constructor() {}

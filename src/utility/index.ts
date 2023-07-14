@@ -1,5 +1,5 @@
+import { networkInterfaces } from "os";
 import colour from "colors";
-// import { networkInterfaces } from "os";
 
 function getTime() {
     const date = new Date();
@@ -16,8 +16,6 @@ function getTime() {
 
     return colour.gray(`[${hours}:${minutes}:${seconds}]`);
 }
-
-import { networkInterfaces, NetworkInterfaceInfo } from "os";
 
 export function addresses(): { [key: string]: string[] } {
     const nets = networkInterfaces();

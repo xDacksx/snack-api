@@ -1,11 +1,7 @@
-import { controller } from "../controllers";
+import { ResSignUp, ResVerifyToken } from "../interfaces/middlewares/auth";
+import { ResGetFirebase, ResSignIn } from "../interfaces/middlewares/auth";
 import { Next, Req, Res } from "../interfaces/middlewares.interface";
-import {
-    ResGetFirebase,
-    ResSignIn,
-    ResSignUp,
-    ResVerifyToken,
-} from "../interfaces/middlewares/auth";
+import { controller } from "../controllers";
 
 export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
     const { name, lastname, gender } = req.body;

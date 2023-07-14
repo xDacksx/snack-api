@@ -1,5 +1,3 @@
-import { UserModel } from "../models";
-
 export interface authSignUp {
     name: string;
     lastname: string;

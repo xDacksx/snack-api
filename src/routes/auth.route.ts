@@ -1,15 +1,10 @@
+import { verifyToken, signIn, signUp } from "../middlewares/auth.middleware";
+import { signUpVaidator } from "../middlewares/validators/auth.validator";
+import { signInVaidator } from "../middlewares/validators/auth.validator";
+import { getFirebaseApiKeys } from "../middlewares/auth.middleware";
+import { sessionSignIn } from "../middlewares/auth.middleware";
 import { Router } from "express";
-import {
-    verifyToken,
-    signIn,
-    signUp,
-    sessionSignIn,
-    getFirebaseApiKeys,
-} from "../middlewares/auth.middleware";
-import {
-    signInVaidator,
-    signUpVaidator,
-} from "../middlewares/validators/auth.validator";
+
 const router: Router = Router();
 
 router.get("/firebase-keys", getFirebaseApiKeys);

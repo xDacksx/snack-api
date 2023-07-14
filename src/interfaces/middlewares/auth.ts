@@ -1,6 +1,5 @@
-import { TypedResponse } from "..";
-import { UserModel } from "../models";
 import { ServerResponse } from "../server.interface";
+import { TypedResponse } from "..";
 
 export type ResSignUp = TypedResponse<ServerResponse<null | UserInfo>>;
 export type ResSignIn = TypedResponse<

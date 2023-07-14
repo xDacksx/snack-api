@@ -1,6 +1,6 @@
+import { ErrorMessage, InfoMessage } from "../utility";
 import { Role as IRole } from "../interfaces/models/";
 import { primsa } from ".";
-import { ErrorMessage, InfoMessage } from "../utility";
 
 export class Role {
     constructor() {}

@@ -1,10 +1,10 @@
-import { controller, primsa } from ".";
-import { authSignIn } from "../interfaces/controllers/auth";
-import { compare, genSalt, hash } from "bcrypt";
 import { SessionModel, User, UserModel } from "../interfaces/models";
-import { ErrorMessage, InfoMessage } from "../utility";
 import { ControllerResponse } from "../interfaces/controllers";
+import { authSignIn } from "../interfaces/controllers/auth";
+import { ErrorMessage, InfoMessage } from "../utility";
+import { compare, genSalt, hash } from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
+import { controller, primsa } from ".";
 
 export class Auth {
     constructor() {}

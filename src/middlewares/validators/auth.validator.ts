@@ -1,5 +1,5 @@
-import { check, validationResult, Result } from "express-validator";
 import { Next, Req, Res } from "../../interfaces/middlewares.interface";
+import { check, validationResult, Result } from "express-validator";
 
 export const signUpVaidator = [
     check("name")
