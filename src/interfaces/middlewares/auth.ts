@@ -11,6 +11,19 @@ export type ResSignIn = TypedResponse<
 >;
 export type ResVerifyToken = TypedResponse<ServerResponse<null>>;
 
+export type ResGetFirebase = TypedResponse<
+    ServerResponse<firebaseConfig | null>
+>;
+
+interface firebaseConfig {
+    apiKey: string;
+    authDomain: string;
+    projectId: string;
+    storageBucket: string;
+    messagingSenderId: string;
+    appId: string;
+}
+
 interface UserInfo {
     email: string;
 

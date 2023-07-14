@@ -4,6 +4,7 @@ import {
     signIn,
     signUp,
     sessionSignIn,
+    getFirebaseApiKeys,
 } from "../middlewares/auth.middleware";
 import {
     signInVaidator,
@@ -12,6 +13,7 @@ import {
 import { Index } from "../middlewares";
 const router: Router = Router();
 
+router.get("/firebase", getFirebaseApiKeys);
 router.post("/sign-up", signUpVaidator, signUp);
 router.post("/sign-in", signInVaidator, signIn);
 router.get("/verify", verifyToken, sessionSignIn);

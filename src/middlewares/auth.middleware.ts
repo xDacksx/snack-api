@@ -1,6 +1,7 @@
 import { controller } from "../controllers";
-import { Next, Req } from "../interfaces/middlewares.interface";
+import { Next, Req, Res } from "../interfaces/middlewares.interface";
 import {
+    ResGetFirebase,
     ResSignIn,
     ResSignUp,
     ResVerifyToken,
@@ -156,4 +157,31 @@ export const verifyToken = async (
             message: "Error!",
         });
     }
+};
+
+export const getFirebaseApiKeys = async (
+    req: Req,
+    res: ResGetFirebase
+): Promise<ResGetFirebase> => {
+    const firebaseConfig = {
+        apiKey: process.env.apiKey as string,
+        authDomain: process.env.authDomain as string,
+        projectId: process.env.projectId as string,
+        storageBucket: process.env.storageBucket as string,
+        messagingSenderId: process.env.messagingSenderId as string,
+        appId: process.env.appId as string,
+    };
+
+    if (!firebaseConfig.apiKey)
+        return res.send({
+            data: null,
+            message: "No api key was found",
+            errors: ["No api key was found"],
+        });
+
+    return res.send({
+        data: firebaseConfig,
+        errors: [],
+        message: "",
+    });
 };
