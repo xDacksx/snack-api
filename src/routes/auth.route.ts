@@ -5,7 +5,6 @@ import {
     signUp,
     sessionSignIn,
     getFirebaseApiKeys,
-    googleSignUp,
 } from "../middlewares/auth.middleware";
 import {
     signInVaidator,
