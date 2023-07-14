@@ -77,7 +77,7 @@ export const signUpVaidator = [
         if (errors.length < 1) return next();
 
         return res.send({
-            message: "Error!",
+            message: "You must fill the form!",
             user: null,
             errors,
         });
@@ -118,7 +118,7 @@ export const signInVaidator = [
         if (errors.length < 1) return next();
 
         return res.send({
-            message: "Error!",
+            message: "You must fill the form!",
             user: null,
             errors,
         });
