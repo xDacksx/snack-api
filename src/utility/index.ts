@@ -1,4 +1,5 @@
 import colour from "colors";
+// import { networkInterfaces } from "os";
 
 function getTime() {
     const date = new Date();
@@ -14,6 +15,31 @@ function getTime() {
             : `0${date.getSeconds()}`;
 
     return colour.gray(`[${hours}:${minutes}:${seconds}]`);
+}
+
+import { networkInterfaces, NetworkInterfaceInfo } from "os";
+
+export function addresses(): { [key: string]: string[] } {
+    const nets = networkInterfaces();
+    const results: { [key: string]: string[] } = {};
+
+    for (const name of Object.keys(nets)) {
+        if (nets[name]) {
+            //@ts-ignore
+            for (const net of nets[name]) {
+                const familyV4Value: string | number =
+                    typeof net.family === "string" ? "IPv4" : 4;
+                if (net.family === familyV4Value && !net.internal) {
+                    if (!results[name]) {
+                        results[name] = [];
+                    }
+                    results[name].push(net.address);
+                }
+            }
+        }
+    }
+
+    return results;
 }
 
 /**
