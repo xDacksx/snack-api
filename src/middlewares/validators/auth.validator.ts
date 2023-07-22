@@ -13,7 +13,7 @@ export const signUpVaidator = [
         .trim()
         .withMessage("Name value must be a string value")
 
-        .isLength({ min: 4, max: 50 })
+        .isLength({ min: 2, max: 50 })
         .withMessage("Name field must be 4-50 characters"),
     check("lastname")
         .exists()
@@ -26,7 +26,7 @@ export const signUpVaidator = [
         .trim()
         .withMessage("Lastname value must be a string value")
 
-        .isLength({ min: 4, max: 50 })
+        .isLength({ min: 2, max: 50 })
         .withMessage("Lastname field must be 4-50 characters"),
 
     check("gender")
@@ -136,7 +136,7 @@ export const googleAuthVaidator = [
         .trim()
         .withMessage("Name value must be a string value")
 
-        .isLength({ min: 4, max: 50 })
+        .isLength({ min: 2, max: 50 })
         .withMessage("Name field must be 4-50 characters"),
     check("lastname")
         .exists()
@@ -149,7 +149,7 @@ export const googleAuthVaidator = [
         .trim()
         .withMessage("Lastname value must be a string value")
 
-        .isLength({ min: 4, max: 50 })
+        .isLength({ min: 2, max: 50 })
         .withMessage("Lastname field must be 4-50 characters"),
 
     check("email")
