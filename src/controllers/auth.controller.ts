@@ -1,6 +1,11 @@
 import { SessionModel, User, UserModel } from "../interfaces/models";
 import { ControllerResponse } from "../interfaces/controllers";
-import { authSignIn } from "../interfaces/controllers/auth";
+import {
+    authSignIn,
+    controllerResGoogle,
+    controllerResSession,
+    controllerResSignIn,
+} from "../interfaces/controllers/auth";
 import { ErrorMessage, InfoMessage } from "../utility";
 import { compare, genSalt, hash } from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
@@ -58,12 +63,7 @@ export class Auth {
         }
     }
 
-    public async signIn(data: authSignIn): Promise<
-        ControllerResponse<{
-            user: UserModel;
-            token: string;
-        } | null>
-    > {
+    public async signIn(data: authSignIn): Promise<controllerResSignIn> {
         const { email, password } = data;
         const user = await this.findUser(email);
 
@@ -143,9 +143,7 @@ export class Auth {
         }
     }
 
-    public async sessionSignIn(
-        token: string
-    ): Promise<ControllerResponse<UserModel | null>> {
+    public async sessionSignIn(token: string): Promise<controllerResSession> {
         try {
             const sessionId = verify(token, process.env.WEB_TOKEN || "secret");
 
@@ -182,6 +180,48 @@ export class Auth {
             return {
                 data: null,
                 message: "Unknown error!",
+            };
+        }
+    }
+
+    public async google(data: User): Promise<controllerResGoogle> {
+        try {
+            const alreadyExists = await this.findUser(data.email);
+            if (alreadyExists) {
+                const res = await this.signIn({
+                    email: data.email,
+                    password: data.password,
+                });
+
+                if (!res.data) throw new Error("Parameter is not a number!");
+
+                return {
+                    data: {
+                        mode: "sign-in",
+                        data: {
+                            user: res.data?.user,
+                            token: res.data?.token,
+                        },
+                    },
+                    message: res.message,
+                };
+            }
+
+            const res = await this.signUp(data);
+            if (!res) throw new Error("Parameter is not a number!");
+
+            return {
+                data: {
+                    mode: "sign-up",
+                    data: res,
+                },
+                message: "Created account",
+            };
+        } catch (error) {
+            if (error instanceof Error) ErrorMessage(error.message);
+            return {
+                data: null,
+                message: "Something went wrong!",
             };
         }
     }
