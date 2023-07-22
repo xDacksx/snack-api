@@ -1,4 +1,8 @@
-import { ResSignUp, ResVerifyToken } from "../interfaces/middlewares/auth";
+import {
+    ResGoogleAuth,
+    ResSignUp,
+    ResVerifyToken,
+} from "../interfaces/middlewares/auth";
 import { ResGetFirebase, ResSignIn } from "../interfaces/middlewares/auth";
 import { Next, Req, Res } from "../interfaces/middlewares.interface";
 import { controller } from "../controllers";
@@ -182,7 +186,10 @@ export const getFirebaseApiKeys = async (
     });
 };
 
-export const googleAuth = async (req: Req, res: Res): Promise<Res> => {
+export const googleAuth = async (
+    req: Req,
+    res: ResGoogleAuth
+): Promise<ResGoogleAuth> => {
     const { email, password, name, lastname } = req.body;
 
     const clientRole = await controller.role.client;
@@ -200,5 +207,19 @@ export const googleAuth = async (req: Req, res: Res): Promise<Res> => {
         roleId: clientRole.id,
     });
 
-    return res.json(data);
+    if (!data.data)
+        return res.send({
+            message: "Something went wrong",
+            data: null,
+            errors: [data.message],
+        });
+
+    return res.send({
+        data: {
+            mode: data.data.mode,
+            data: data.data.data,
+        },
+        message: data.message,
+        errors: [],
+    });
 };
