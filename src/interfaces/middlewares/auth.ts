@@ -1,5 +1,6 @@
 import { ServerResponse } from "../server.interface";
 import { TypedResponse } from "..";
+import { UserModel } from "../models";
 
 export type ResSignUp = TypedResponse<ServerResponse<null | UserInfo>>;
 export type ResSignIn = TypedResponse<
@@ -9,6 +10,18 @@ export type ResSignIn = TypedResponse<
     }>
 >;
 export type ResVerifyToken = TypedResponse<ServerResponse<null>>;
+
+export type ResGoogleAuth = TypedResponse<
+    ServerResponse<{
+        mode: "sign-in" | "sign-up";
+        data:
+            | UserModel
+            | {
+                  user: UserModel;
+                  token: string;
+              };
+    } | null>
+>;
 
 export type ResGetFirebase = TypedResponse<
     ServerResponse<firebaseConfig | null>
