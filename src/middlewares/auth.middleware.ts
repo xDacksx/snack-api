@@ -181,3 +181,24 @@ export const getFirebaseApiKeys = async (
         message: "",
     });
 };
+
+export const googleAuth = async (req: Req, res: Res): Promise<Res> => {
+    const { email, password, name, lastname } = req.body;
+
+    const clientRole = await controller.role.client;
+    const maleId = (await controller.gender.male)?.id;
+    if (!maleId) return res.json();
+    if (!clientRole?.id) return res.json();
+
+    const data = await controller.auth.google({
+        email,
+        password,
+        name,
+        lastname,
+        birthdate: new Date(),
+        genderId: maleId,
+        roleId: clientRole.id,
+    });
+
+    return res.json(data);
+};
