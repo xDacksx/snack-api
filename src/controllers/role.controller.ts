@@ -1,5 +1,5 @@
 import { ErrorMessage, InfoMessage } from "../utility";
-import { Role as IRole } from "../interfaces/models/";
+import { RoleModel as IRole } from "../interfaces/models/";
 import { prisma } from ".";
 
 export class Role {
@@ -8,6 +8,13 @@ export class Role {
     public async search(name: string): Promise<IRole | null> {
         try {
             return await prisma.role.findUnique({ where: { name } });
+        } catch (error) {
+            return null;
+        }
+    }
+    public async searchId(id: number): Promise<IRole | null> {
+        try {
+            return await prisma.role.findUnique({ where: { id } });
         } catch (error) {
             return null;
         }
