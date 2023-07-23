@@ -9,6 +9,7 @@ import { controller } from "./controllers";
 import { IndexRouter } from "./routes";
 import colour from "colors";
 import cors from "cors";
+import { RoleRoute } from "./routes/role.route";
 
 export class Server {
     private server: Application;
@@ -47,6 +48,10 @@ export class Server {
             {
                 direction: "/auth",
                 function: AuthRoute,
+            },
+            {
+                direction: "/role",
+                function: RoleRoute,
             },
         ];
 
