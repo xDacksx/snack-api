@@ -10,6 +10,7 @@ import { IndexRouter } from "./routes";
 import colour from "colors";
 import cors from "cors";
 import { RoleRoute } from "./routes/role.route";
+import { GenderRoute } from "./routes/gender.route";
 
 export class Server {
     private server: Application;
@@ -52,6 +53,10 @@ export class Server {
             {
                 direction: "/role",
                 function: RoleRoute,
+            },
+            {
+                direction: "/gender",
+                function: GenderRoute,
             },
         ];
 
