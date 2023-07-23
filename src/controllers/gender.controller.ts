@@ -1,5 +1,5 @@
 import { ErrorMessage, InfoMessage } from "../utility";
-import { Gender as IGender } from "../interfaces/models";
+import { GenderModel as IGender } from "../interfaces/models";
 import { prisma } from ".";
 
 export class Gender {
@@ -8,6 +8,13 @@ export class Gender {
     public async search(name: string): Promise<IGender | null> {
         try {
             return await prisma.gender.findUnique({ where: { name } });
+        } catch (error) {
+            return null;
+        }
+    }
+    public async searchId(id: number): Promise<IGender | null> {
+        try {
+            return await prisma.gender.findUnique({ where: { id } });
         } catch (error) {
             return null;
         }
