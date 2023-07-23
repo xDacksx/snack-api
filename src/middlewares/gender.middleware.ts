@@ -23,3 +23,9 @@ export const GetGender = async (
         errors: [],
     });
 };
+
+export const GetGenders = async (req: Req, res: Res): Promise<Res> => {
+    const genders = await controller.gender.all;
+
+    return res.json(genders);
+};
