@@ -43,4 +43,12 @@ export class Role {
     public get delivery() {
         return this.search("delivery");
     }
+
+    private async getAll() {
+        return await prisma.role.findMany();
+    }
+
+    public get all() {
+        return this.getAll();
+    }
 }

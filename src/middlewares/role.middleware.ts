@@ -23,3 +23,8 @@ export const GetRole = async (
         errors: [],
     });
 };
+
+export const GetRoles = async (req: Req, res: Res): Promise<Res> => {
+    const roles = await controller.role.all;
+    return res.json(roles);
+};
