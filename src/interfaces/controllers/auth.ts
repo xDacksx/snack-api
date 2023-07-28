@@ -1,17 +1,10 @@
 import { ControllerResponse } from ".";
+import {
+    UserInformation,
+    googleSignIn,
+    googleSignUp,
+} from "../common/auth.interface";
 import { UserModel } from "../models";
-
-export interface authSignUp {
-    name: string;
-    lastname: string;
-    birthdate: Date;
-
-    email: string;
-    password: string;
-
-    genderId: number;
-    roleId: number;
-}
 
 export interface authSignIn {
     email: string;
@@ -19,18 +12,12 @@ export interface authSignIn {
 }
 
 export type controllerResSignIn = ControllerResponse<{
-    user: UserModel;
+    user: UserInformation;
     token: string;
 } | null>;
 
-export type controllerResSession = ControllerResponse<UserModel | null>;
+export type controllerResSession = ControllerResponse<UserInformation | null>;
 
-export type controllerResGoogle = ControllerResponse<{
-    mode: "sign-in" | "sign-up";
-    data:
-        | UserModel
-        | {
-              user: UserModel;
-              token: string;
-          };
-} | null>;
+type googleAuth = googleSignIn | googleSignUp;
+
+export type controllerResGoogle = ControllerResponse<googleAuth | null>;

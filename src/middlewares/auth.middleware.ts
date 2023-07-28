@@ -32,13 +32,24 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
         });
 
         if (user) {
+            let role: "admin" | "client" | "delivery" = "client";
+
+            const admin = await controller.role.admin;
+            const delivery = await controller.role.delivery;
+
+            if (admin && admin.id === user.roleId) role = "admin";
+            if (delivery && delivery.id === user.roleId) role = "delivery";
+
+            const gender = await controller.gender.searchId(user.genderId);
+
             return res.send({
                 data: {
                     email: user.email,
                     name: user.name,
                     lastname: user.lastname,
-                    roleId: user.roleId,
-                    genderId: user.genderId,
+                    role,
+                    //@ts-ignore
+                    gender: gender.name,
                     createdAt: user.createdAt,
                     updatedAt: user.updatedAt,
                 },
@@ -89,8 +100,8 @@ export const signIn = async (req: Req, res: ResSignIn): Promise<ResSignIn> => {
                     email: user.email,
                     name: user.name,
                     lastname: user.lastname,
-                    roleId: user.roleId,
-                    genderId: user.genderId,
+                    role: user.role,
+                    gender: user.gender,
                     createdAt: user.createdAt,
                     updatedAt: user.updatedAt,
                 },
@@ -213,6 +224,17 @@ export const googleAuth = async (
             data: null,
             errors: [data.message],
         });
+
+    if (data.data.mode === "sign-in") {
+        return res.send({
+            data: {
+                mode: data.data.mode,
+                data: data.data.data,
+            },
+            message: data.message,
+            errors: [],
+        });
+    }
 
     return res.send({
         data: {

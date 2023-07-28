@@ -80,9 +80,31 @@ export class Auth {
                     InfoMessage("Account", data.email, "logged.");
                     console.log();
 
+                    let role: "admin" | "client" | "delivery" = "client";
+
+                    const admin = await controller.role.admin;
+                    const delivery = await controller.role.delivery;
+
+                    if (admin && admin.id === user.roleId) role = "admin";
+                    if (delivery && delivery.id === user.roleId)
+                        role = "delivery";
+
+                    const gender = await controller.gender.searchId(
+                        user.genderId
+                    );
+
                     return {
                         data: {
-                            user,
+                            user: {
+                                email: user.email,
+                                name: user.name,
+                                lastname: user.lastname,
+                                role,
+                                //@ts-ignore
+                                gender: gender.name,
+                                createdAt: user.createdAt,
+                                updatedAt: user.createdAt,
+                            },
                             token: webToken,
                         },
                         message: `Logged as ${email}`,
@@ -165,8 +187,27 @@ export class Auth {
                     message: "This user was deleted or never existed!",
                 };
 
+            let role: "admin" | "client" | "delivery" = "client";
+
+            const admin = await controller.role.admin;
+            const delivery = await controller.role.delivery;
+
+            if (admin && admin.id === user.roleId) role = "admin";
+            if (delivery && delivery.id === user.roleId) role = "delivery";
+
+            const gender = await controller.gender.searchId(user.genderId);
+
             return {
-                data: user,
+                data: {
+                    email: user.email,
+                    name: user.name,
+                    lastname: user.lastname,
+                    role,
+                    //@ts-ignore
+                    gender: gender.name,
+                    createdAt: user.createdAt,
+                    updatedAt: user.createdAt,
+                },
                 message: `Account ${user.email} logged`,
             };
         } catch (error) {
@@ -199,7 +240,7 @@ export class Auth {
                     data: {
                         mode: "sign-in",
                         data: {
-                            user: res.data?.user,
+                            user: res.data.user,
                             token: res.data?.token,
                         },
                     },
@@ -210,10 +251,29 @@ export class Auth {
             const res = await this.signUp(data);
             if (!res) throw new Error("Parameter is not a number!");
 
+            let role: "admin" | "client" | "delivery" = "client";
+
+            const admin = await controller.role.admin;
+            const delivery = await controller.role.delivery;
+
+            if (admin && admin.id === res.roleId) role = "admin";
+            if (delivery && delivery.id === res.roleId) role = "delivery";
+
+            const gender = await controller.gender.searchId(res.genderId);
+
             return {
                 data: {
                     mode: "sign-up",
-                    data: res,
+                    data: {
+                        email: res.email,
+                        name: res.name,
+                        lastname: res.lastname,
+                        role,
+                        //@ts-ignore
+                        gender: gender.name,
+                        createdAt: res.createdAt,
+                        updatedAt: res.updatedAt,
+                    },
                 },
                 message: "Created account",
             };
