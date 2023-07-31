@@ -32,7 +32,7 @@ export class Server {
     private middlewares(): void {
         this.server.use(
             cors({
-                origin: ["http://localhost:5173", `http://${this.ip}:5173`],
+                origin: ["http://localhost:4321", `http://${this.ip}:4321`],
             })
         );
         this.server.use(FileUpload({ createParentPath: true }));
