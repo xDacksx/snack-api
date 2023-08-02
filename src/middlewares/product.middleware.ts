@@ -30,6 +30,7 @@ export const createProduct = async (
         available,
         price,
         imageId: data.id,
+        imageUrl: "",
     });
 
     if (product) {

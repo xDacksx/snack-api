@@ -71,6 +71,7 @@ model Product {
   description String
   file        File   @relation(fields: [imageId], references: [id])
   imageId     Int
+  imageUrl    String
 
   price     Float
   available Boolean

@@ -38,11 +38,18 @@ export interface File {
     url: string;
 }
 
+export interface Directory {
+    name: string;
+    path: string;
+    type: "file" | "folder";
+}
+
 export interface Product {
     id?: number;
     name: string;
     description: string;
     imageId: number;
+    imageUrl: string;
     quantity: number;
     available: boolean;
     price: number;
