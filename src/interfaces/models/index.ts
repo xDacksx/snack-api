@@ -32,7 +32,25 @@ export interface Session {
     expires: Date;
 }
 
+export interface File {
+    id: number;
+    path: string;
+    url: string;
+}
+
+export interface Product {
+    id?: number;
+    name: string;
+    description: string;
+    imageId: number;
+    quantity: number;
+    available: boolean;
+    price: number;
+}
+
 export type GenderModel = Gender & Model;
 export type RoleModel = Role & Model;
 export type UserModel = User & Model;
 export type SessionModel = Session & Model;
+export type FileModel = File & Model;
+export type ProductModel = Product & Model;
