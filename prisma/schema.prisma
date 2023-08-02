@@ -13,11 +13,12 @@ datasource db {
 model File {
   id   Int    @id @default(autoincrement())
   path String
-
-  Brand Brand[]
+  url  String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  Product Product[]
 }
 
 model Role {
@@ -64,35 +65,16 @@ model User {
   updatedAt DateTime? @updatedAt
 }
 
-model Location {
-  id         Int    @id @default(autoincrement())
-  coordinate String
-
-  Brand   Brand @relation(fields: [brandId], references: [id])
-  brandId Int
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
-model Brand {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  imageId Int
-  image   File @relation(fields: [imageId], references: [id])
-
-  locations Location[]
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
 model Product {
-  id          Int     @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   name        String
   description String
-  available   Boolean
+  file        File   @relation(fields: [imageId], references: [id])
+  imageId     Int
+
+  price     Float
+  available Boolean
+  quantity  Int
 
   OrderProduct OrderProduct[]
 
