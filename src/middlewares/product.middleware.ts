@@ -1,9 +1,12 @@
 import { UploadedFile } from "express-fileupload";
 import { Req, Res } from "../interfaces/middlewares.interface";
 import { controller } from "../controllers";
-import { Product } from "../interfaces/models";
+import { Product, ProductModel } from "../interfaces/models";
 import { parseBoolean } from "../utility";
-import { ResCreateProduct } from "../interfaces/middlewares/product";
+import {
+    ResCreateProduct,
+    ResGetProducts,
+} from "../interfaces/middlewares/product";
 
 export const createProduct = async (
     req: Req,
@@ -42,4 +45,20 @@ export const createProduct = async (
             message: `Something went wrong!`,
         });
     }
+};
+
+export const getProducts = async (
+    req: Req,
+    res: ResGetProducts
+): Promise<ResGetProducts> => {
+    const products: ProductModel[] = await controller.product.all;
+
+    return res.send({
+        message:
+            products.length > 0
+                ? "Products fetched"
+                : "There are currently no registered products",
+        data: products,
+        errors: [],
+    });
 };
