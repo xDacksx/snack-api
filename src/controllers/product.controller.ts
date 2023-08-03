@@ -14,6 +14,15 @@ export class Product {
         }
     }
 
+    public async getProduct(id: number): Promise<ProductModel | null> {
+        try {
+            return await prisma.product.findUnique({ where: { id } });
+        } catch (error) {
+            if (error instanceof Error) ErrorMessage(error.message);
+            return null;
+        }
+    }
+
     async create(product: IProduct): Promise<ProductModel | null> {
         try {
             return await prisma.product.create({ data: product });
