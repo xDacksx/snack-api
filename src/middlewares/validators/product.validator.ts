@@ -5,6 +5,7 @@ import {
     Result,
     ValidationError,
     FieldValidationError,
+    param,
 } from "express-validator";
 
 export const createProductValidator = [
@@ -97,6 +98,30 @@ export const createProductValidator = [
                 }
             }
         }
+
+        if (errors.length < 1) return next();
+
+        return res.send({
+            message: "You must fill the form!",
+            errors,
+        });
+    },
+];
+
+export const getProductValidator = [
+    param("id")
+        .exists()
+        .withMessage("Couldn't find id param")
+
+        .notEmpty()
+        .withMessage("Id param can not be empty")
+
+        .isInt({ min: 0, max: 999 })
+        .withMessage("Id value must be a number value"),
+
+    (req: Req, res: Res, next: Next): Res | void => {
+        const result: Result<ValidationError> = validationResult(req);
+        const errors = result.array({ onlyFirstError: true });
 
         if (errors.length < 1) return next();
 
