@@ -68,6 +68,16 @@ export class File {
         }
     }
 
+    public async getFile(id: number): Promise<FileModel | null> {
+        try {
+            const file = await prisma.file.findUnique({ where: { id } });
+            return file;
+        } catch (error) {
+            if (error instanceof Error) ErrorMessage(error.message);
+            return null;
+        }
+    }
+
     private checkFile(path: string) {
         return existsSync(path);
     }
