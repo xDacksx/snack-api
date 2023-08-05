@@ -12,12 +12,13 @@ import cors from "cors";
 import { RoleRoute } from "./routes/role.route";
 import { GenderRoute } from "./routes/gender.route";
 import { ProductRoute } from "./routes/product.route";
+import { config } from "dotenv";
 
 export class Server {
     private server: Application;
     private port: ServerPort;
 
-    private ip = addresses().WiFi[0];
+    private ip = "192.168.1.1";
 
     constructor({ port }: ServerOptions) {
         this.server = Express();
@@ -27,6 +28,7 @@ export class Server {
         this.routes();
     }
     private settings(): void {
+        config();
         colour.enable();
         this.server.set("port", this.port);
     }
@@ -85,7 +87,13 @@ export class Server {
 
         if (this.ip === "127.0.0.1") return console.log();
 
-        InfoMessage(`Network:  http://${this.ip}:${this.port}\n`);
+        const networks = addresses();
+
+        for (const item in networks) {
+            const name = item;
+            const ip = networks[item][0];
+            InfoMessage(`${name}:  http://${ip}:${this.port}\n`);
+        }
     }
 
     private async setup() {
