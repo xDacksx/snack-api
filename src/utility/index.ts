@@ -40,6 +40,17 @@ export function addresses(): { [key: string]: string[] } {
     return results;
 }
 
+export function ips() {
+    const networks = addresses();
+    const IPS: string[] = [];
+
+    for (const item in networks) {
+        const ip = networks[item][0];
+        IPS.push(ip);
+    }
+    return IPS;
+}
+
 /**
  * Prints a green message on console.
  * @param part1 First part of the message.
