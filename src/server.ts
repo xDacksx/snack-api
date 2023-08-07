@@ -1,6 +1,6 @@
 import { ServerPort, ServerRoute } from "./interfaces/server.interface";
 import { ServerOptions } from "./interfaces/server.interface";
-import { SuccessMessage, addresses } from "./utility";
+import { SuccessMessage, addresses, ips } from "./utility";
 import { ErrorMessage, InfoMessage } from "./utility";
 import { AuthRoute } from "./routes/auth.route";
 import Express, { Application } from "express";
@@ -18,7 +18,7 @@ export class Server {
     private server: Application;
     private port: ServerPort;
 
-    private ip = "192.168.1.1";
+    private ips = ips();
 
     constructor({ port }: ServerOptions) {
         this.server = Express();
@@ -33,9 +33,11 @@ export class Server {
         this.server.set("port", this.port);
     }
     private middlewares(): void {
+        const ports = this.ips.map((ip) => `http://${ip}:4321`);
+
         this.server.use(
             cors({
-                origin: ["http://localhost:4321", `http://${this.ip}:4321`],
+                origin: ["http://localhost:4321", ...ports],
             })
         );
         this.server.use(FileUpload({ createParentPath: true }));
@@ -85,15 +87,14 @@ export class Server {
         SuccessMessage("Compiled succesfully!\n");
         InfoMessage(`Local:    http://localhost:${this.port}`);
 
-        if (this.ip === "127.0.0.1") return console.log();
-
         const networks = addresses();
 
         for (const item in networks) {
             const name = item;
             const ip = networks[item][0];
-            InfoMessage(`${name}:  http://${ip}:${this.port}\n`);
+            InfoMessage(`${name}:  http://${ip}:${this.port}`);
         }
+        console.log();
     }
 
     private async setup() {
