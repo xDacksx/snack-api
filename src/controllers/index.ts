@@ -5,6 +5,7 @@ import { Role } from "./role.controller";
 import { Auth } from "./auth.controller";
 import { File } from "./file.controller";
 import { Product } from "./product.controller";
+import { User } from "./user.controller";
 
 export const prisma = new PrismaClient();
 
@@ -33,6 +34,10 @@ export class ControllerClient {
 
     get product(): Product {
         return new Product();
+    }
+
+    get user(): User {
+        return new User();
     }
 }
 
