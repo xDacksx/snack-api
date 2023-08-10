@@ -13,6 +13,7 @@ import { RoleRoute } from "./routes/role.route";
 import { GenderRoute } from "./routes/gender.route";
 import { ProductRoute } from "./routes/product.route";
 import { config } from "dotenv";
+import { UserRoute } from "./routes/user.route";
 
 export class Server {
     private server: Application;
@@ -66,6 +67,10 @@ export class Server {
             {
                 direction: "/product",
                 function: ProductRoute,
+            },
+            {
+                direction: "/user",
+                function: UserRoute,
             },
         ];
 
