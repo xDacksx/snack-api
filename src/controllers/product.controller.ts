@@ -41,8 +41,11 @@ export class Product {
         try {
             const current = await this.getProduct(id);
             if (!current) throw new Error("This Product does not exits!");
+            let available = current.available;
 
-            if (!product.available) product.available = current.available;
+            if (product.available === "true") available = true;
+            if (product.available === "false") available = false;
+            if (product.available === undefined) available = current.available;
             if (!product.description) product.description = current.description;
             if (!product.id) product.id = current.id;
             if (!product.imageId) product.imageId = current.imageId;
@@ -51,9 +54,14 @@ export class Product {
             if (!product.price) product.price = current.price;
             if (!product.quantity) product.quantity = current.quantity;
 
+            console.log(product.available);
+
             return await prisma.product.update({
                 where: { id },
-                data: product,
+                data: {
+                    ...product,
+                    available,
+                },
             });
         } catch (error) {
             if (error instanceof Error) ErrorMessage(error.message);

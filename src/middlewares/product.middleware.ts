@@ -74,7 +74,7 @@ export const editProduct = async (
     const description: string = req.body.description;
     const price: number = parseFloat(req.body.price);
     const quantity: number = parseInt(req.body.quantity);
-    const available: boolean = parseBoolean(req.body.available);
+    const available: "true" | "false" | undefined = req.body.available;
 
     const product = await controller.product.edit(
         {

@@ -10,6 +10,6 @@ export interface EditProductProps {
     imageId?: number;
     imageUrl?: string;
     quantity?: number;
-    available?: boolean;
+    available?: "true" | "false" | undefined;
     price?: number;
 }
