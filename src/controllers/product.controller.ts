@@ -54,8 +54,6 @@ export class Product {
             if (!product.price) product.price = current.price;
             if (!product.quantity) product.quantity = current.quantity;
 
-            console.log(product.available);
-
             return await prisma.product.update({
                 where: { id },
                 data: {
