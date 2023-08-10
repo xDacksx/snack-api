@@ -1,8 +1,8 @@
 import { UploadedFile } from "express-fileupload";
-import { Req, Res } from "../interfaces/middlewares.interface";
+import { Req } from "../interfaces/middlewares.interface";
 import { controller, prisma } from "../controllers";
-import { Product, ProductModel } from "../interfaces/models";
-import { parseBoolean } from "../utility";
+import { ProductModel } from "../interfaces/models";
+import { addresses, parseBoolean } from "../utility";
 import {
     ResCreateProduct,
     ResGetProduct,
@@ -39,7 +39,9 @@ export const createProduct = async (
         await prisma.product.update({
             where: { id: product.id },
             data: {
-                imageUrl: `http://localhost:5000/product/${product.id}/img`,
+                imageUrl: `http://${addresses().WiFi[0]}:5000/product/${
+                    product.id
+                }/img`,
             },
         });
         return res.send({
