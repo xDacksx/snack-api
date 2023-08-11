@@ -9,6 +9,7 @@ import {
     ResGetProductImg,
     ResGetProducts,
 } from "../interfaces/middlewares/product";
+import { serverIp } from "../server";
 
 export const createProduct = async (
     req: Req,
@@ -32,18 +33,14 @@ export const createProduct = async (
         available,
         price,
         imageId: data.id,
-        imageUrl: "",
     });
 
     if (product) {
-        await prisma.product.update({
-            where: { id: product.id },
-            data: {
-                imageUrl: `http://${addresses().WiFi[0]}:5000/product/${
-                    product.id
-                }/img`,
-            },
-        });
+        await controller.file.editUrl(
+            data.id,
+            `http://${serverIp}:5000/product/${product.id}/img`
+        );
+
         return res.send({
             data: product,
             errors: [],
@@ -152,7 +149,7 @@ export const getProducts = async (
     req: Req,
     res: ResGetProducts
 ): Promise<ResGetProducts> => {
-    const products: ProductModel[] = await controller.product.all;
+    const products: ProductModel[] = await controller.product.getAll();
 
     return res.send({
         message:

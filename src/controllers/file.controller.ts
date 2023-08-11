@@ -12,7 +12,10 @@ export class File {
     private storageRoot = resolve("S:\\SnackStorage");
     private imagesPath = this.storageRoot + "\\images\\";
 
-    public async upload(file: UploadedFile): Promise<controllerResUploadFile> {
+    public async upload(
+        file: UploadedFile,
+        url?: string
+    ): Promise<controllerResUploadFile> {
         try {
             const filename = getDateAsText() + "_" + file.name;
             const path = this.imagesPath + filename;
@@ -23,13 +26,40 @@ export class File {
             const fileUploaded = await prisma.file.create({
                 data: {
                     path,
-                    url: "",
+                    url: url ?? "",
                 },
             });
 
             return {
                 message: "File has been uploaded!",
                 data: fileUploaded,
+            };
+        } catch (error) {
+            let message = "Something went wrong!";
+            if (error instanceof Error) {
+                ErrorMessage(error.message);
+                message = error.message;
+            }
+            return {
+                data: null,
+                message,
+            };
+        }
+    }
+
+    public async editUrl(
+        id: number,
+        url: string
+    ): Promise<controllerResUploadFile> {
+        try {
+            const fileEdited = await prisma.file.update({
+                where: { id },
+                data: { url },
+            });
+
+            return {
+                message: "File url updated!",
+                data: fileEdited,
             };
         } catch (error) {
             let message = "Something went wrong!";

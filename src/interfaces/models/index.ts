@@ -49,7 +49,6 @@ export interface Product {
     name: string;
     description: string;
     imageId: number;
-    imageUrl: string;
     quantity: number;
     available: boolean;
     price: number;

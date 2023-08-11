@@ -1,5 +1,5 @@
 import { throws } from "assert";
-import { prisma } from ".";
+import { controller, prisma } from ".";
 import { EditProductProps } from "../interfaces/controllers/product";
 import { Product as IProduct, ProductModel } from "../interfaces/models/";
 import { ErrorMessage } from "../utility";
@@ -7,9 +7,36 @@ import { ErrorMessage } from "../utility";
 export class Product {
     constructor() {}
 
-    public get all() {
+    private async LinkImg(id: number) {
         try {
-            return prisma.product.findMany();
+            const product = await this.getProduct(id);
+            if (!product) throw new Error("");
+
+            const image = await controller.file.getFile(product.imageId);
+            if (!image) throw new Error("");
+
+            return {
+                ...product,
+                imageUrl: image.url,
+            };
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    public async getAll() {
+        try {
+            const products = await prisma.product.findMany();
+
+            const productWithImg: any[] = [];
+
+            for (let i = 0; i < products.length; i++) {
+                const product = products[i];
+
+                productWithImg.push(await this.LinkImg(product.id));
+            }
+
+            return productWithImg;
         } catch (error) {
             if (error instanceof Error) ErrorMessage(error.message);
             return [];
@@ -49,7 +76,6 @@ export class Product {
             if (!product.description) product.description = current.description;
             if (!product.id) product.id = current.id;
             if (!product.imageId) product.imageId = current.imageId;
-            if (!product.imageUrl) product.imageUrl = current.imageUrl;
             if (!product.name) product.name = current.name;
             if (!product.price) product.price = current.price;
             if (!product.quantity) product.quantity = current.quantity;

@@ -8,7 +8,6 @@ export interface EditProductProps {
     name?: string;
     description?: string;
     imageId?: number;
-    imageUrl?: string;
     quantity?: number;
     available?: "true" | "false" | undefined;
     price?: number;
