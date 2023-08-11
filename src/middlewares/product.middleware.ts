@@ -60,14 +60,16 @@ export const editProduct = async (
     res: ResCreateProduct
 ): Promise<ResCreateProduct> => {
     let imageId: number | undefined = undefined;
+    const id: number = parseInt(req.params.id);
 
     if (req.files) {
         const image = req.files.image as UploadedFile;
-        const { data } = await controller.file.upload(image);
+        const { data } = await controller.file.upload(
+            image,
+            `http://${serverIp}:5000/product/${id}/img`
+        );
         if (data) imageId = data.id;
     }
-
-    const id: number = parseInt(req.params.id);
 
     const name: string = req.body.name;
     const description: string = req.body.description;
