@@ -15,11 +15,15 @@ import { ProductRoute } from "./routes/product.route";
 import { config } from "dotenv";
 import { UserRoute } from "./routes/user.route";
 
+export const serverIp = "192.168.2.50";
+
 export class Server {
     private server: Application;
     private port: ServerPort;
 
     private ips = ips();
+
+    private ip = serverIp;
 
     constructor({ port }: ServerOptions) {
         this.server = Express();
@@ -38,7 +42,7 @@ export class Server {
 
         this.server.use(
             cors({
-                origin: ["http://localhost:4321", ...ports],
+                origin: ["http://localhost:4321", `http://${this.ip}:4321`],
             })
         );
         this.server.use(FileUpload({ createParentPath: true }));
@@ -92,13 +96,15 @@ export class Server {
         SuccessMessage("Compiled succesfully!\n");
         InfoMessage(`Local:    http://localhost:${this.port}`);
 
-        const networks = addresses();
+        // const networks = addresses();
 
-        for (const item in networks) {
-            const name = item;
-            const ip = networks[item][0];
-            InfoMessage(`${name}:  http://${ip}:${this.port}`);
-        }
+        // for (const item in networks) {
+        //     const name = item;
+        //     const ip = networks[item][0];
+        //     InfoMessage(`${name}:  http://${ip}:${this.port}`);
+        // }
+
+        InfoMessage(`WiFi:  http://${this.ip}:${this.port}`);
         console.log();
     }
 
