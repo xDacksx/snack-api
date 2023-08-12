@@ -6,7 +6,7 @@ import {
 } from "../interfaces/controllers/user";
 import { ErrorMessage, InfoMessage } from "../utility";
 import { controller, prisma } from ".";
-import { RoleModel } from "../interfaces/models";
+import { RoleModel, UserModel } from "../interfaces/models";
 
 export class User {
     constructor() {}
@@ -92,6 +92,27 @@ export class User {
                 data: false,
                 message: "Error",
             };
+        }
+    }
+
+    public async getAllUsers(): Promise<UserModel[]> {
+        try {
+            return await prisma.user.findMany();
+        } catch (error) {
+            return [];
+        }
+    }
+
+    public async getAllDeliverers(): Promise<UserModel[]> {
+        try {
+            const delivery = await controller.role.delivery;
+            if (!delivery) return [];
+
+            return await prisma.user.findMany({
+                where: { roleId: delivery.id },
+            });
+        } catch (error) {
+            return [];
         }
     }
 }
