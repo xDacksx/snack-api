@@ -16,3 +16,12 @@ export const changePassword = async (req: Req, res: Res): Promise<Res> => {
 
     return res.json(data);
 };
+
+export const changeRole = async (req: Req, res: Res): Promise<Res> => {
+    const role: "client" | "admin" | "delivery" = req.body.roleName;
+    const email: string = req.body.email;
+
+    const data = await controller.user.changeRole({ email, role });
+
+    return res.json(data);
+};

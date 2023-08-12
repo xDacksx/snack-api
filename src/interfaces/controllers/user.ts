@@ -6,4 +6,9 @@ export interface changePasswordProps {
     newPassword: string;
 }
 
+export interface changeRoleProps {
+    role: "client" | "delivery" | "admin";
+    email: string;
+}
+
 export type changePasswordResponse = ControllerResponse<boolean>;
