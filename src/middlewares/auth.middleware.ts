@@ -6,6 +6,7 @@ import {
 import { ResGetFirebase, ResSignIn } from "../interfaces/middlewares/auth";
 import { Next, Req, Res } from "../interfaces/middlewares.interface";
 import { controller } from "../controllers";
+import { UserInformation } from "../interfaces/common/auth.interface";
 
 export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
     const { name, lastname, gender } = req.body;
@@ -168,6 +169,24 @@ export const verifyToken = async (
             message: "Error!",
         });
     }
+};
+
+export const verifyAdmin = async (
+    req: Req,
+    res: ResVerifyToken,
+    next: Next
+): Promise<ResVerifyToken | void> => {
+    await verifyToken(req, res, () => {
+        const user: UserInformation = res.locals.data;
+
+        if (user.role === "admin") return next();
+
+        return res.send({
+            data: null,
+            errors: ["This user is not an admin"],
+            message: "This user is not an admin",
+        });
+    });
 };
 
 export const getFirebaseApiKeys = async (

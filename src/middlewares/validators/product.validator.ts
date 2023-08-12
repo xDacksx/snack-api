@@ -7,10 +7,11 @@ import {
     FieldValidationError,
     param,
 } from "express-validator";
-import { verifyToken } from "../auth.middleware";
+import { verifyAdmin, verifyToken } from "../auth.middleware";
 
 export const createProductValidator = [
     verifyToken,
+    verifyAdmin,
     check("name")
         .exists()
         .withMessage("Couldn't find name field")
@@ -112,6 +113,7 @@ export const createProductValidator = [
 
 export const editProductValidator = [
     verifyToken,
+    verifyAdmin,
     check("name")
         .optional()
 
