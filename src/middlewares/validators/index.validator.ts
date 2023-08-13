@@ -56,16 +56,16 @@ export const changeInformationValidator = [
         .notEmpty()
         .withMessage("Id param can not be empty")
 
-        .isInt({ min: 0, max: 999 })
-        .withMessage("Id value must be a number value"),
+        .isFloat()
+        .withMessage("Id value must be a double value"),
     check("latY")
         .optional()
 
         .notEmpty()
         .withMessage("Id param can not be empty")
 
-        .isInt({ min: 0, max: 999 })
-        .withMessage("Id value must be a number value"),
+        .isFloat()
+        .withMessage("Id value must be a double value"),
 
     (req: Req, res: Res, next: Next): Res | void => {
         const result: Result<ValidationError> = validationResult(req);
