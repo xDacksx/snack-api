@@ -60,6 +60,11 @@ export interface Information {
     value: string;
 }
 
+export interface Cart {
+    id: number;
+    userEmail: string;
+}
+
 export type GenderModel = Gender & Model;
 export type RoleModel = Role & Model;
 export type UserModel = User & Model;
@@ -67,3 +72,4 @@ export type SessionModel = Session & Model;
 export type FileModel = File & Model;
 export type ProductModel = Product & Model;
 export type InformationModel = Information & Model;
+export type CartModel = Cart & Model;
