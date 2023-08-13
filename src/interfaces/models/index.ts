@@ -54,9 +54,16 @@ export interface Product {
     price: number;
 }
 
+export interface Information {
+    id: number;
+    name: string;
+    value: string;
+}
+
 export type GenderModel = Gender & Model;
 export type RoleModel = Role & Model;
 export type UserModel = User & Model;
 export type SessionModel = Session & Model;
 export type FileModel = File & Model;
 export type ProductModel = Product & Model;
+export type InformationModel = Information & Model;

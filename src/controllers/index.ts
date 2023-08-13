@@ -6,6 +6,7 @@ import { Auth } from "./auth.controller";
 import { File } from "./file.controller";
 import { Product } from "./product.controller";
 import { User } from "./user.controller";
+import { Information } from "./information.controller";
 
 export const prisma = new PrismaClient();
 
@@ -38,6 +39,10 @@ export class ControllerClient {
 
     get user(): User {
         return new User();
+    }
+
+    get information(): Information {
+        return new Information();
     }
 }
 
