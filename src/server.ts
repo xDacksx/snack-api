@@ -118,5 +118,7 @@ export class Server {
 
         await controller.gender.create("male");
         await controller.gender.create("female");
+
+        await controller.information.createContactInfo();
     }
 }
