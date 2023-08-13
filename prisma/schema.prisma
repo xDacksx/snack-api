@@ -68,6 +68,7 @@ model User {
   ReportUser     Report[] @relation("reportEmailClient")
   ReportDelivery Report[] @relation("reportEmailDeliver")
 
+  Cart    Cart[]    @relation("cartEmailClient")
   Session Session[] @relation("sessionEmailUser")
 
   createdAt DateTime  @default(now())
@@ -86,6 +87,32 @@ model Product {
   quantity  Int
 
   OrderProduct OrderProduct[]
+  CartProduct  CartProduct[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Cart {
+  id Int @id @default(autoincrement())
+
+  userEmail String
+  user      User   @relation("cartEmailClient", fields: [userEmail], references: [email])
+
+  CartProduct CartProduct[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model CartProduct {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  cartId Int
+  card   Cart @relation(fields: [cartId], references: [id])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
