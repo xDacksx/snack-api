@@ -116,16 +116,6 @@ export class Server {
         const connected = await controller.databse.checkConnection();
         if (!connected) return;
 
-        // console.log(await controller.cart.get("diegozar02@gmail.com"));
-        console.log(
-            await controller.cart.addProduct({
-                email: "diegozar02@gmail.com",
-                productId: 52,
-            })
-        );
-
-        // await controller.cart.buy("diegozar02@gmail.com");
-
         await controller.role.create("admin");
         await controller.role.create("client");
         await controller.role.create("delivery");
