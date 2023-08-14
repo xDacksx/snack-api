@@ -7,8 +7,13 @@ import { File } from "./file.controller";
 import { Product } from "./product.controller";
 import { User } from "./user.controller";
 import { Information } from "./information.controller";
+import { Cart } from "./cart.controller";
+import Stripe from "stripe";
 
 export const prisma = new PrismaClient();
+export const stripe = new Stripe(process.env.STRIPE_TESTKEY || "", {
+    apiVersion: "2022-11-15",
+});
 
 export class ControllerClient {
     constructor() {}
@@ -43,6 +48,10 @@ export class ControllerClient {
 
     get information(): Information {
         return new Information();
+    }
+
+    get cart(): Cart {
+        return new Cart();
     }
 }
 
