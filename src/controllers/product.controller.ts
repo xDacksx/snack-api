@@ -78,7 +78,9 @@ export class Product {
             if (!product.imageId) product.imageId = current.imageId;
             if (!product.name) product.name = current.name;
             if (!product.price) product.price = current.price;
-            if (!product.quantity) product.quantity = current.quantity;
+
+            if (product.quantity === undefined)
+                product.quantity = current.quantity;
 
             return await prisma.product.update({
                 where: { id },
