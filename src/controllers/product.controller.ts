@@ -1,13 +1,17 @@
 import { throws } from "assert";
 import { controller, prisma } from ".";
 import { EditProductProps } from "../interfaces/controllers/product";
-import { Product as IProduct, ProductModel } from "../interfaces/models/";
+import {
+    Product as IProduct,
+    ProductModel,
+    ProductWithImgModel,
+} from "../interfaces/models/";
 import { ErrorMessage } from "../utility";
 
 export class Product {
     constructor() {}
 
-    private async LinkImg(id: number) {
+    private async LinkImg(id: number): Promise<ProductWithImgModel | null> {
         try {
             const product = await this.getProduct(id);
             if (!product) throw new Error("");
@@ -20,23 +24,24 @@ export class Product {
                 imageUrl: image.url,
             };
         } catch (error) {
+            return null;
             console.log(error);
         }
     }
 
     public async getAll() {
         try {
-            const products = await prisma.product.findMany();
+            const products: ProductModel[] = await prisma.product.findMany();
 
-            const productWithImg: any[] = [];
+            const productsWithImg: ProductWithImgModel[] = [];
 
             for (let i = 0; i < products.length; i++) {
                 const product = products[i];
-
-                productWithImg.push(await this.LinkImg(product.id));
+                const productWithImg = await this.LinkImg(product.id || 0);
+                if (productWithImg) productsWithImg.push(productWithImg);
             }
 
-            return productWithImg;
+            return productsWithImg;
         } catch (error) {
             if (error instanceof Error) ErrorMessage(error.message);
             return [];

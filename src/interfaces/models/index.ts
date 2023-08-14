@@ -53,6 +53,16 @@ export interface Product {
     available: boolean;
     price: number;
 }
+export interface ProductWithImg {
+    id?: number;
+    name: string;
+    description: string;
+    imageId: number;
+    quantity: number;
+    available: boolean;
+    price: number;
+    imageUrl: string;
+}
 
 export interface Information {
     id: number;
@@ -71,5 +81,6 @@ export type UserModel = User & Model;
 export type SessionModel = Session & Model;
 export type FileModel = File & Model;
 export type ProductModel = Product & Model;
+export type ProductWithImgModel = ProductWithImg & Model;
 export type InformationModel = Information & Model;
 export type CartModel = Cart & Model;
