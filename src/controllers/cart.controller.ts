@@ -135,6 +135,7 @@ export class Cart {
 
             return true;
         } catch (error) {
+            console.log(error);
             return false;
         }
     }
