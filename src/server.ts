@@ -42,7 +42,11 @@ export class Server {
 
         this.server.use(
             cors({
-                origin: ["http://localhost:4321", `http://${this.ip}:4321`],
+                origin: [
+                    "http://localhost:4321",
+                    `http://${this.ip}:4321`,
+                    `http://${this.ip}:1234`,
+                ],
             })
         );
         this.server.use(FileUpload({ createParentPath: true }));
@@ -111,6 +115,16 @@ export class Server {
     private async setup() {
         const connected = await controller.databse.checkConnection();
         if (!connected) return;
+
+        // console.log(await controller.cart.get("diegozar02@gmail.com"));
+        console.log(
+            await controller.cart.addProduct({
+                email: "diegozar02@gmail.com",
+                productId: 52,
+            })
+        );
+
+        // await controller.cart.buy("diegozar02@gmail.com");
 
         await controller.role.create("admin");
         await controller.role.create("client");
