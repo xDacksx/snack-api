@@ -84,8 +84,7 @@ export class Product {
             if (!product.name) product.name = current.name;
             if (!product.price) product.price = current.price;
 
-            if (product.quantity === undefined)
-                product.quantity = current.quantity;
+            if (isNaN(product.quantity)) product.quantity = current.quantity;
 
             return await prisma.product.update({
                 where: { id },
