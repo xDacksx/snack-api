@@ -5,7 +5,13 @@ import {
     StoreProduct,
     addProductProps,
 } from "../interfaces/controllers/cart";
-import { CartModel, ProductModel } from "../interfaces/models";
+import {
+    CartModel,
+    ProductModel,
+    ProductWithImgModel,
+} from "../interfaces/models";
+import { ErrorMessage } from "../utility";
+import { serverIp } from "../server";
 
 export class Cart {
     constructor() {}
@@ -27,7 +33,7 @@ export class Cart {
                 where: { cartId: cart.id },
             });
 
-            const products: ProductModel[] = [];
+            const products: ProductWithImgModel[] = [];
 
             for (let i = 0; i < response.length; i++) {
                 const element = response[i];
@@ -35,7 +41,11 @@ export class Cart {
                 const product = await prisma.product.findUnique({
                     where: { id: element.productId },
                 });
-                if (product) products.push(product);
+
+                if (product) {
+                    const img = await controller.product.LinkImg(product.id);
+                    if (product && img) products.push(img);
+                }
             }
 
             const cartItems = await this.countProducts(products);
@@ -92,7 +102,8 @@ export class Cart {
 
             for (const key in cartItems) {
                 const element = cartItems[key];
-                id.push(element.id);
+                if (element.quantity + 1 > product.quantity)
+                    id.push(element.id);
             }
 
             if (product.quantity < 1 || id.includes(productId))
@@ -106,10 +117,21 @@ export class Cart {
             });
             if (!success) throw new Error("Something went wrong");
 
-            return true;
+            return {
+                added: true,
+                msg: "Added",
+            };
         } catch (error) {
-            console.log(error);
-            return false;
+            let message = "";
+            if (error instanceof Error) {
+                message = error.message;
+                ErrorMessage(
+                    "Couldn't add product",
+                    `[${productId}]`,
+                    "because it does not exist!"
+                );
+            }
+            return { added: false, msg: message };
         }
     }
 
@@ -132,11 +154,21 @@ export class Cart {
                 throw new Error("This product is not in this cart");
 
             await prisma.cartProduct.delete({ where: { id: cartProduct.id } });
-
-            return true;
+            return {
+                deleted: true,
+                msg: "Deleted",
+            };
         } catch (error) {
-            console.log(error);
-            return false;
+            let message = "";
+            if (error instanceof Error) {
+                message = error.message;
+                ErrorMessage(
+                    "Couldn't delete product",
+                    `[${productId}]`,
+                    "because it does not exist!"
+                );
+            }
+            return { deleted: false, msg: message };
         }
     }
 
@@ -157,7 +189,7 @@ export class Cart {
 
             const CartItems = await this.countProducts(userCart);
 
-            if (CartItems.length < 1) return;
+            if (CartItems.length < 1) throw new Error("Cart is empty!");
 
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ["card", "oxxo"],
@@ -176,12 +208,30 @@ export class Cart {
                         quantity: item.quantity,
                     };
                 }),
-                success_url: "https://www.x.com",
+                success_url: `https://${serverIp}:5000/user/cart/success`,
+                // cancel_url: `https://${serverIp}:5000/user/cart/failure`,
             });
 
-            console.log(session.url);
+            return {
+                data: {
+                    url: session.url,
+                    success: session.success_url,
+                    failure: session.cancel_url,
+                    total: session.amount_total,
+                },
+                errors: [],
+            };
         } catch (error) {
-            console.log(error);
+            let message = "";
+            if (error instanceof Error) {
+                message = error.message;
+                ErrorMessage("Couldn't buy the cart because it's empty");
+            }
+
+            return {
+                data: null,
+                errors: [message],
+            };
         }
     }
 
