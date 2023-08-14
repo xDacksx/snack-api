@@ -11,7 +11,7 @@ import { ErrorMessage } from "../utility";
 export class Product {
     constructor() {}
 
-    private async LinkImg(id: number): Promise<ProductWithImgModel | null> {
+    public async LinkImg(id: number): Promise<ProductWithImgModel | null> {
         try {
             const product = await this.getProduct(id);
             if (!product) throw new Error("");
