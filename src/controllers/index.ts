@@ -53,6 +53,20 @@ export class ControllerClient {
     get cart(): Cart {
         return new Cart();
     }
+
+    public async updateUrls(ip: string) {
+        const files = await prisma.file.findMany();
+
+        for await (const file of files) {
+            const currentUrl = file.url;
+            const path = currentUrl.split(":5000/")[1];
+            const newUrl = `http://${ip}:5000/${path}`;
+
+            if (!currentUrl.includes(ip)) {
+                await controller.file.editUrl(file.id, newUrl);
+            }
+        }
+    }
 }
 
 export const controller = new ControllerClient();

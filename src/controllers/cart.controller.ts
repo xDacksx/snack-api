@@ -11,7 +11,7 @@ import {
     ProductWithImgModel,
 } from "../interfaces/models";
 import { ErrorMessage } from "../utility";
-import { serverIp } from "../server";
+import { serverAdress } from "../server";
 
 export class Cart {
     constructor() {}
@@ -208,8 +208,8 @@ export class Cart {
                         quantity: item.quantity,
                     };
                 }),
-                success_url: `https://${serverIp}:5000/user/cart/success`,
-                // cancel_url: `https://${serverIp}:5000/user/cart/failure`,
+                success_url: `${serverAdress}/user/cart/success`,
+                // cancel_url: `${serverAdress}/user/cart/failure`,
             });
 
             return {

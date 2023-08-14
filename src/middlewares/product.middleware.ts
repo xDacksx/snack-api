@@ -9,7 +9,7 @@ import {
     ResGetProductImg,
     ResGetProducts,
 } from "../interfaces/middlewares/product";
-import { serverIp } from "../server";
+import { serverAdress } from "../server";
 
 export const createProduct = async (
     req: Req,
@@ -38,7 +38,7 @@ export const createProduct = async (
     if (product) {
         await controller.file.editUrl(
             data.id,
-            `http://${serverIp}:5000/product/${product.id}/img`
+            `${serverAdress}/product/${product.id}/img`
         );
 
         return res.send({
@@ -66,7 +66,7 @@ export const editProduct = async (
         const image = req.files.image as UploadedFile;
         const { data } = await controller.file.upload(
             image,
-            `http://${serverIp}:5000/product/${id}/img`
+            `${serverAdress}/product/${id}/img`
         );
         if (data) imageId = data.id;
     }

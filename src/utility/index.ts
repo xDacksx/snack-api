@@ -40,14 +40,22 @@ export function addresses(): { [key: string]: string[] } {
     return results;
 }
 
-export function ips() {
+export function getAdresses() {
     const networks = addresses();
-    const IPS: string[] = [];
+    const IPS: {
+        Wifi: string[];
+        Ethernet: string[];
+    } = {
+        Wifi: [],
+        Ethernet: [],
+    };
 
     for (const item in networks) {
         const ip = networks[item][0];
-        IPS.push(ip);
+        if (item.includes("WiFi")) IPS.Wifi.push(ip);
+        else IPS.Ethernet.push(ip);
     }
+
     return IPS;
 }
 

@@ -1,6 +1,6 @@
 import { ServerPort, ServerRoute } from "./interfaces/server.interface";
 import { ServerOptions } from "./interfaces/server.interface";
-import { SuccessMessage, addresses, ips } from "./utility";
+import { SuccessMessage, addresses, getAdresses } from "./utility";
 import { ErrorMessage, InfoMessage } from "./utility";
 import { AuthRoute } from "./routes/auth.route";
 import Express, { Application } from "express";
@@ -15,15 +15,16 @@ import { ProductRoute } from "./routes/product.route";
 import { config } from "dotenv";
 import { UserRoute } from "./routes/user.route";
 
-export const serverIp = "192.168.2.50";
+const { Wifi, Ethernet } = getAdresses();
+const serverIp = Wifi.length > 0 ? Wifi[0] : Ethernet[0];
+export const serverAdress = `http://${serverIp}:5000`;
 
 export class Server {
     private server: Application;
     private port: ServerPort;
 
-    private ips = ips();
-
-    private ip = serverIp;
+    private mainIp = serverIp;
+    private allIp = [...Wifi, ...Ethernet];
 
     constructor({ port }: ServerOptions) {
         this.server = Express();
@@ -32,23 +33,17 @@ export class Server {
         this.middlewares();
         this.routes();
     }
-    private settings(): void {
+    private async settings(): Promise<void> {
+        await controller.updateUrls(this.mainIp);
         config();
         colour.enable();
         this.server.set("port", this.port);
     }
     private middlewares(): void {
-        const ports = this.ips.map((ip) => `http://${ip}:4321`);
+        const corsDirections = this.allIp.map((ip) => `http://${ip}:4321`);
+        corsDirections.push("http://localhost:4321");
 
-        this.server.use(
-            cors({
-                origin: [
-                    "http://localhost:4321",
-                    `http://${this.ip}:4321`,
-                    `http://${this.ip}:1234`,
-                ],
-            })
-        );
+        this.server.use(cors({ origin: corsDirections }));
         this.server.use(FileUpload({ createParentPath: true }));
         this.server.use(Express.urlencoded({ extended: true }));
         this.server.use(Express.json());
@@ -100,15 +95,15 @@ export class Server {
         SuccessMessage("Compiled succesfully!\n");
         InfoMessage(`Local:    http://localhost:${this.port}`);
 
-        // const networks = addresses();
+        const networks = addresses();
 
-        // for (const item in networks) {
-        //     const name = item;
-        //     const ip = networks[item][0];
-        //     InfoMessage(`${name}:  http://${ip}:${this.port}`);
-        // }
+        for (const item in networks) {
+            const name = item;
+            const ip = networks[item][0];
+            InfoMessage(`${name}:  http://${ip}:${this.port}`);
+        }
 
-        InfoMessage(`WiFi:  http://${this.ip}:${this.port}`);
+        // InfoMessage(`WiFi:  http://${this.mainIp}:${this.port}`);
         console.log();
     }
 
