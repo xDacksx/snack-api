@@ -52,6 +52,8 @@ export class Auth {
                     },
                 });
 
+                await controller.cart.create(user.email);
+
                 InfoMessage("Account", data.email, "created.");
 
                 return user;
