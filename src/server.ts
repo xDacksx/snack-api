@@ -18,6 +18,7 @@ import { UserRoute } from "./routes/user.route";
 const { Wifi, Ethernet } = getAdresses();
 const serverIp = Wifi.length > 0 ? Wifi[0] : Ethernet[0];
 export const serverAdress = `http://${serverIp}:5000`;
+export const webAdress = `http://${serverIp}:4321`;
 
 export class Server {
     private server: Application;
