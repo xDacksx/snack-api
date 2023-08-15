@@ -9,6 +9,7 @@ import { User } from "./user.controller";
 import { Information } from "./information.controller";
 import { Cart } from "./cart.controller";
 import Stripe from "stripe";
+import { Order } from "./order.controller";
 
 export const prisma = new PrismaClient();
 export const stripe = new Stripe(process.env.STRIPE_TESTKEY || "", {
@@ -52,6 +53,10 @@ export class ControllerClient {
 
     get cart(): Cart {
         return new Cart();
+    }
+
+    get order(): Order {
+        return new Order();
     }
 
     public async updateUrls(ip: string) {
