@@ -39,6 +39,7 @@ export const deliverersList = async (req: Req, res: Res): Promise<Res> => {
             updatedAt,
             roleId,
             genderId,
+            google,
         } = users[i];
 
         let role: "admin" | "client" | "delivery" = "client";
@@ -60,6 +61,7 @@ export const deliverersList = async (req: Req, res: Res): Promise<Res> => {
             role,
             createdAt,
             updatedAt,
+            google,
         });
     }
 

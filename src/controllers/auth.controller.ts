@@ -42,6 +42,7 @@ export class Auth {
                     data: {
                         email: data.email,
                         password: passwordHashed,
+                        google: data.google,
 
                         name,
                         lastname,
@@ -101,6 +102,7 @@ export class Auth {
                                 email: user.email,
                                 name: user.name,
                                 lastname: user.lastname,
+                                google: user.google,
                                 role,
                                 //@ts-ignore
                                 gender: gender.name,
@@ -204,6 +206,7 @@ export class Auth {
                     email: user.email,
                     name: user.name,
                     lastname: user.lastname,
+                    google: user.google,
                     role,
                     //@ts-ignore
                     gender: gender.name,
@@ -270,6 +273,7 @@ export class Auth {
                         email: res.email,
                         name: res.name,
                         lastname: res.lastname,
+                        google: res.google,
                         role,
                         //@ts-ignore
                         gender: gender.name,

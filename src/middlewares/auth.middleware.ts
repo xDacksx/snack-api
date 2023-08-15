@@ -30,6 +30,7 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
             birthdate: new Date(),
             genderId,
             roleId: clientRole.id,
+            google: false,
         });
 
         if (user) {
@@ -48,6 +49,7 @@ export const signUp = async (req: Req, res: ResSignUp): Promise<ResSignUp> => {
                     email: user.email,
                     name: user.name,
                     lastname: user.lastname,
+                    google: user.google,
                     role,
                     //@ts-ignore
                     gender: gender.name,
@@ -101,6 +103,7 @@ export const signIn = async (req: Req, res: ResSignIn): Promise<ResSignIn> => {
                     email: user.email,
                     name: user.name,
                     lastname: user.lastname,
+                    google: user.google,
                     role: user.role,
                     gender: user.gender,
                     createdAt: user.createdAt,
@@ -235,6 +238,7 @@ export const googleAuth = async (
         birthdate: new Date(),
         genderId: maleId,
         roleId: clientRole.id,
+        google: true,
     });
 
     if (!data.data)

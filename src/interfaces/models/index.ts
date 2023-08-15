@@ -16,6 +16,7 @@ export interface Gender {
 export interface User {
     email: string;
     password: string;
+    google: boolean;
 
     name: string;
     lastname: string;
@@ -75,6 +76,12 @@ export interface Cart {
     userEmail: string;
 }
 
+export interface Order {
+    id: string;
+    userEmail: string;
+    deliveryEmail: string;
+}
+
 export type GenderModel = Gender & Model;
 export type RoleModel = Role & Model;
 export type UserModel = User & Model;
@@ -84,3 +91,4 @@ export type ProductModel = Product & Model;
 export type ProductWithImgModel = ProductWithImg & Model;
 export type InformationModel = Information & Model;
 export type CartModel = Cart & Model;
+export type OrderModel = Order & Model;

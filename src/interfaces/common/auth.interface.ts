@@ -6,6 +6,7 @@ export interface UserInformation {
 
     role: "admin" | "client" | "delivery";
     gender: string;
+    google: boolean;
 
     createdAt: Date;
     updatedAt: Date | null;

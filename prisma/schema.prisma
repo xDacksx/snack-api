@@ -49,8 +49,9 @@ model Gender {
 }
 
 model User {
-  email    String @id
+  email    String  @id
   password String
+  google   Boolean
 
   name      String
   lastname  String
@@ -121,6 +122,9 @@ model CartProduct {
 model Order {
   id String @id @default(uuid())
 
+  url    String @db.VarChar(1000)
+  secret String
+
   userEmail String
   client    User   @relation("orderEmailClient", fields: [userEmail], references: [email])
 
@@ -153,6 +157,7 @@ model OrderStatus {
   order   Order  @relation(fields: [orderId], references: [id])
   orderId String
 
+  paid      Boolean
   delivered Boolean
   location  String
 
