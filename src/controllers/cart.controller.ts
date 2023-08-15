@@ -11,7 +11,7 @@ import {
     ProductWithImgModel,
 } from "../interfaces/models";
 import { ErrorMessage } from "../utility";
-import { serverAdress } from "../server";
+import { serverAdress, webAdress } from "../server";
 
 export class Cart {
     constructor() {}
@@ -191,6 +191,16 @@ export class Cart {
 
             if (CartItems.length < 1) throw new Error("Cart is empty!");
 
+            const secret = Math.random().toString(36).slice(-8);
+
+            const order = await controller.order.create({
+                email,
+                location: "",
+                products: userCart,
+                url: "",
+                secret,
+            });
+
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ["card", "oxxo"],
                 mode: "payment",
@@ -208,9 +218,15 @@ export class Cart {
                         quantity: item.quantity,
                     };
                 }),
-                success_url: `${serverAdress}/user/cart/success`,
+                success_url: `${webAdress}/orders/success/${secret}`,
                 // cancel_url: `${serverAdress}/user/cart/failure`,
             });
+
+            if (!order.data || !session.url) throw new Error("");
+
+            await controller.order.setUrl(session.url, order.data?.id);
+
+            if (!order.data) throw new Error("Order error!");
 
             return {
                 data: {
@@ -235,7 +251,20 @@ export class Cart {
         }
     }
 
-    private async countProducts(userCart: ProductModel[]) {
+    public async empty(email: string) {
+        try {
+            const { cart } = await this.get(email);
+            if (!cart) throw new Error("This cart does not exist");
+
+            await prisma.cartProduct.deleteMany({ where: { cartId: cart.id } });
+
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    public async countProducts(userCart: ProductModel[]) {
         const CartItems: CartItem[] = [];
         const itemCount: { [key: number]: number } = {};
 
