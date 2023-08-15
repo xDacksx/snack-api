@@ -125,6 +125,8 @@ model Order {
   url    String @db.VarChar(1000)
   secret String
 
+  total Float
+
   userEmail String
   client    User   @relation("orderEmailClient", fields: [userEmail], references: [email])
 

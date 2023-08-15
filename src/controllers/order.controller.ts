@@ -1,6 +1,6 @@
 import { controller, prisma } from ".";
 import { createOrderProps } from "../interfaces/controllers/order";
-import { UserModel } from "../interfaces/models";
+import { OrderModel, UserModel } from "../interfaces/models";
 import { randomFrom } from "../utility";
 
 export class Order {
@@ -20,12 +20,17 @@ export class Order {
 
             const deliverer: UserModel = randomFrom(deliverers);
 
+            const total = products
+                .map((product) => product.price)
+                .reduce((a, b) => a + b);
+
             const order = await prisma.order.create({
                 data: {
                     userEmail: email,
                     deliveryEmail: deliverer.email,
                     url,
                     secret,
+                    total,
                 },
             });
 
@@ -77,6 +82,56 @@ export class Order {
                 data: undefined,
                 errors: ["si"],
             };
+        }
+    }
+
+    public async get(id: string) {
+        try {
+            const order = await prisma.order.findUnique({ where: { id } });
+            if (!order) throw new Error();
+
+            const status = await prisma.orderStatus.findFirst({
+                where: { orderId: order.id },
+            });
+            if (!status) throw new Error();
+
+            const items = await prisma.orderProduct.findMany({
+                where: { orderId: order.id },
+            });
+
+            return {
+                id: order.id,
+                delivered: status.delivered,
+                paid: status.paid,
+                location: status.location,
+                total: order.total,
+                date: order.createdAt,
+                url: status.paid ? "" : order.url,
+                products: items.map((product) => {
+                    return {
+                        id: product.productId,
+                        quantity: product.quantity,
+                    };
+                }),
+            };
+        } catch (error) {
+            return [];
+        }
+    }
+
+    public async getAll(email: string) {
+        try {
+            const orders: OrderModel[] = await prisma.order.findMany();
+
+            const Orders = [];
+
+            for await (const order of orders) {
+                Orders.push(await this.get(order.id));
+            }
+
+            return Orders;
+        } catch (error) {
+            return [];
         }
     }
 
