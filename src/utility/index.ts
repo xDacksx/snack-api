@@ -177,3 +177,7 @@ export function parseBoolean(value: string) {
     if (value === "true") return true;
     else return false;
 }
+
+export function randomFrom(array: Array<any>) {
+    return array[Math.floor(Math.random() * array.length)];
+}
