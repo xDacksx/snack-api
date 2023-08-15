@@ -30,9 +30,9 @@ export const deleteProduct = async (req: Req, res: Res): Promise<Res> => {
 
 export const buyCart = async (req: Req, res: Res): Promise<Res> => {
     const { email }: UserInformation = res.locals.data;
-    const { data } = await controller.cart.buy(email);
+    const data = await controller.cart.buy(email);
 
-    if (data) return res.json(data);
+    if (data && data.data) return res.json(data.data);
 
-    return res.json("nada");
+    return res.json(data);
 };
