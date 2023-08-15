@@ -172,7 +172,7 @@ export class Cart {
         }
     }
 
-    public async buy(email: string) {
+    public async buy(email: string, location: string) {
         try {
             const StoreProducts: Map<number, StoreProduct> = new Map();
             const products = await controller.product.getAll();
@@ -195,11 +195,13 @@ export class Cart {
 
             const order = await controller.order.create({
                 email,
-                location: "",
+                location,
                 products: userCart,
                 url: "",
                 secret,
             });
+
+            if (!order.data) throw new Error("");
 
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ["card", "oxxo"],
@@ -218,11 +220,11 @@ export class Cart {
                         quantity: item.quantity,
                     };
                 }),
-                success_url: `${webAdress}/orders/success/${secret}`,
+                success_url: `${webAdress}/orders/success/${secret}/${order.data.id}`,
                 // cancel_url: `${serverAdress}/user/cart/failure`,
             });
 
-            if (!order.data || !session.url) throw new Error("");
+            if (!session.url) throw new Error("");
 
             await controller.order.setUrl(session.url, order.data?.id);
 

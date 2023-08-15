@@ -1,5 +1,8 @@
-import { controller, prisma } from ".";
-import { createOrderProps } from "../interfaces/controllers/order";
+import { controller, prisma, stripe } from ".";
+import {
+    createOrderProps,
+    setStateProps,
+} from "../interfaces/controllers/order";
 import { OrderModel, UserModel } from "../interfaces/models";
 import { randomFrom } from "../utility";
 
@@ -115,13 +118,15 @@ export class Order {
                 }),
             };
         } catch (error) {
-            return [];
+            return null;
         }
     }
 
     public async getAll(email: string) {
         try {
-            const orders: OrderModel[] = await prisma.order.findMany();
+            const orders: OrderModel[] = await prisma.order.findMany({
+                where: { userEmail: email },
+            });
 
             const Orders = [];
 
@@ -143,6 +148,29 @@ export class Order {
                     url,
                 },
             });
+        } catch (error) {}
+    }
+
+    public async setState({ id, delivered, paid }: setStateProps) {
+        try {
+            const current = await this.get(id);
+            const status = await prisma.orderStatus.findFirst({
+                where: { orderId: id },
+            });
+            if (!current || !status) throw new Error();
+
+            if (delivered === undefined) delivered = current.delivered;
+            if (paid === undefined) paid = current.paid;
+
+            await prisma.orderStatus.update({
+                where: { id: status.id },
+                data: {
+                    delivered,
+                    paid,
+                },
+            });
+
+            return await this.get(id);
         } catch (error) {}
     }
 }

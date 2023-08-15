@@ -30,7 +30,10 @@ export const deleteProduct = async (req: Req, res: Res): Promise<Res> => {
 
 export const buyCart = async (req: Req, res: Res): Promise<Res> => {
     const { email }: UserInformation = res.locals.data;
-    const data = await controller.cart.buy(email);
+
+    const location = req.body.location as string;
+
+    const data = await controller.cart.buy(email, location);
 
     if (data && data.data) return res.json(data.data);
 

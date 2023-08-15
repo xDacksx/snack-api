@@ -15,9 +15,19 @@ import {
     getCart,
 } from "../middlewares/cart.middleware";
 import { verifyToken } from "../middlewares/auth.middleware";
-import { addProductValidator } from "../middlewares/validators/cart.validator";
-import { getAllOrders, successBought } from "../middlewares/order.middleware";
-import { successValidator } from "../middlewares/validators/order.validator";
+import {
+    addProductValidator,
+    buyCartValidator,
+} from "../middlewares/validators/cart.validator";
+import {
+    getAllOrders,
+    getOrder,
+    successBought,
+} from "../middlewares/order.middleware";
+import {
+    getOneValidator,
+    successValidator,
+} from "../middlewares/validators/order.validator";
 const router: Router = Router();
 
 router.patch("/change-password", changePasswordValidator, changePassword);
@@ -27,9 +37,10 @@ router.get("/deliverers-list", deliverersList);
 router.get("/cart", verifyToken, getCart);
 router.post("/cart", addProductValidator, addProduct);
 router.delete("/cart", addProductValidator, deleteProduct);
-router.post("/cart/buy", verifyToken, buyCart);
+router.post("/cart/buy", buyCartValidator, buyCart);
 
 router.get("/orders", verifyToken, getAllOrders);
+router.get("/orders/:id", getOneValidator, getOrder);
 router.patch("/orders/success", successValidator, successBought);
 
 export { router as UserRoute };

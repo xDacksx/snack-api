@@ -7,3 +7,9 @@ export interface createOrderProps {
     products: ProductModel[];
     secret: string;
 }
+
+export interface setStateProps {
+    id: string;
+    paid?: boolean;
+    delivered?: boolean;
+}
